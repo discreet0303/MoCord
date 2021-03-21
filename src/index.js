@@ -3,6 +3,9 @@ import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import {handlePermission} from './utils/permission';
+import {storeRecord, test} from './utils/fileManager';
+
 function HomeScreen() {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -13,7 +16,15 @@ function HomeScreen() {
 
 const Stack = createStackNavigator();
 
-function App() {
+const App = () => {
+  React.useEffect(() => {
+    // const ac123 = async () => {
+    //   handlePermission();
+    //   checkFolderExist();
+    // };
+    // ac123();
+    storeRecord();
+  });
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -21,6 +32,6 @@ function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default App;
