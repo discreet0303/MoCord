@@ -3,32 +3,18 @@ import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import {handlePermission} from './utils/permission';
-import {storeRecord, test} from './utils/fileManager';
-
-function HomeScreen() {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Home Screen</Text>
-    </View>
-  );
-}
+import RecordListScreen from './containers/RecordListScreen';
+import RecordEditScreen from './containers/RecordEditScreen';
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  React.useEffect(() => {
-    // const ac123 = async () => {
-    //   handlePermission();
-    //   checkFolderExist();
-    // };
-    // ac123();
-    storeRecord();
-  });
+  React.useEffect(() => {});
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="RecordList" component={RecordListScreen} />
+        <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
