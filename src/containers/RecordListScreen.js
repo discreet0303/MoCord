@@ -20,27 +20,13 @@ const RecordListScreen = ({navigation}) => {
     runAsync();
   });
 
-  const addRecord = async () => {
-    const temp = {
-      datetime: moment().format('YYYY-MM-DD HH:ss'),
-      type: 'food',
-      money: 100,
-      note: 'note1',
-    };
-    let updateRecords = [...records, temp];
-    setRecords(updateRecords);
-    console.log('updateRecords', updateRecords);
-
-    await storeRecords(updateRecords);
-  };
-
   return (
     <View style={styles.root}>
       {_.map(records, (record, idx) => {
         return (
           <View key={idx}>
             <Text>
-              {moment(record.datetime).format('HH:ss')} / {record.type} /
+              {moment(record.datetime).format('HH:mm')} / {record.type} /
               {record.money} / {record.note}
             </Text>
           </View>
@@ -48,8 +34,7 @@ const RecordListScreen = ({navigation}) => {
       })}
       <Button
         title="Go to Record Edit Screen"
-        onPress={() => addRecord()}
-        // onPress={() => navigation.navigate('RecordEdit')}
+        onPress={() => navigation.navigate('RecordEdit')}
       />
     </View>
   );
