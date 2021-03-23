@@ -37,7 +37,7 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
     if (buttonType == 'cle') {
       money = 0;
     } else if (buttonType == 'V') {
-      await createRecord(recordData);
+      if (money != 0) await createRecord(recordData);
       money = 0;
     } else if (money == 0) {
       money = buttonType;
@@ -52,45 +52,41 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
       behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={-100}
       style={{flex: 1}}>
-      <View>
-        <Text>${recordData.money}</Text>
-        {_.map(_.chunk(DEFAULT_RECORD_TYPE, 4), (rowData, rowIdx) => {
-          return (
-            <View key={rowIdx} style={{flexDirection: 'row'}}>
-              {_.map(rowData, (recordItem, recordItemIdx) => (
-                <TouchableOpacity
-                  key={recordItemIdx}
-                  style={[
-                    styles.recordTypeItem,
-                    recordData.type == recordItem.name
-                      ? styles.recordTypeItemActive
-                      : styles.recordTypeItemInactive,
-                  ]}
-                  onPress={() =>
-                    setRecordData((record) => ({
-                      ...record,
-                      type: recordItem.name,
-                    }))
-                  }>
-                  <Text style={[styles.recordTypeText]}>
-                    {recordItem.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          );
-        })}
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={(note) =>
-            setRecordData((record) => ({
-              ...record,
-              note,
-            }))
-          }
-          value={recordData.note}
-        />
-      </View>
+      <Text style={styles.recordText}>${recordData.money}</Text>
+      {_.map(_.chunk(DEFAULT_RECORD_TYPE, 4), (rowData, rowIdx) => {
+        return (
+          <View key={rowIdx} style={{flexDirection: 'row'}}>
+            {_.map(rowData, (recordItem, recordItemIdx) => (
+              <TouchableOpacity
+                key={recordItemIdx}
+                style={[
+                  styles.recordTypeItem,
+                  recordData.type == recordItem.name
+                    ? styles.recordTypeItemActive
+                    : styles.recordTypeItemInactive,
+                ]}
+                onPress={() =>
+                  setRecordData((record) => ({
+                    ...record,
+                    type: recordItem.name,
+                  }))
+                }>
+                <Text style={[styles.recordTypeText]}>{recordItem.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        );
+      })}
+      <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        onChangeText={(note) =>
+          setRecordData((record) => ({
+            ...record,
+            note,
+          }))
+        }
+        value={recordData.note}
+      />
 
       <View style={styles.numberRoot}>
         {_.map(calculatorData, (rowData, rowIdx) => {
@@ -130,7 +126,7 @@ const styles = StyleSheet.create({
   },
   recordTypeItemActive: {
     width: '25%',
-    backgroundColor: 'white',
+    backgroundColor: 'gray',
   },
   recordTypeItemInactive: {
     width: '25%',
