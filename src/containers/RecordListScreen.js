@@ -1,14 +1,34 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
 import _ from 'lodash';
-import moment from 'moment';
 
 import RecordItem from '../componments/RecordItem';
-import {getRecords, storeRecords} from '../utils/fileManager';
+import {getRecords} from '../utils/fileManager';
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  emptyRecordButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    marginVertical: 10,
+    width: 100,
+    padding: 10,
+    height: 50,
+  },
 });
+
+const EmptyRecordButton = ({navigation}) => (
+  <TouchableOpacity
+    style={styles.emptyRecordButton}
+    onPress={() => navigation.navigate('RecordEdit')}>
+    <Text style={{fontSize: 18}}>新增</Text>
+  </TouchableOpacity>
+);
 
 const RecordListScreen = ({navigation}) => {
   const [records, setRecords] = React.useState({});
@@ -24,9 +44,14 @@ const RecordListScreen = ({navigation}) => {
 
   return (
     <View style={styles.root}>
-      {_.map(records, (record, idx) => {
-        return <RecordItem key={idx} record={record} />;
-      })}
+      <View style={{width: '100%'}}>
+        {_.map(records, (record, idx) => {
+          return <RecordItem key={idx} record={record} />;
+        })}
+      </View>
+      <View>
+        {!_.isEmpty(records) && <EmptyRecordButton navigation={navigation} />}
+      </View>
       <Button
         title="Go to Record Edit Screen"
         onPress={() => navigation.navigate('RecordEdit')}
