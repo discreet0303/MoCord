@@ -16,7 +16,7 @@ import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
 import {createRecord} from '../utils/fileManager';
 
 const calculatorData = [
-  [{text: '7'}, {text: '8'}, {text: '9'}, {text: 'cle'}],
+  [{text: '7'}, {text: '8'}, {text: '9'}, {text: 'AC'}],
   [{text: '4'}, {text: '5'}, {text: '6'}, {text: 'x'}],
   [{text: '1'}, {text: '2'}, {text: '3'}, {text: 'x'}],
   [{text: 'x'}, {text: '0'}, {text: 'x'}, {text: 'V'}],
@@ -34,17 +34,19 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
 
   const handleCalculator = async (buttonType) => {
     let money = recordData.money;
-    if (buttonType == 'cle') {
+    let note = recordData.note;
+    if (buttonType == 'AC') {
       money = 0;
     } else if (buttonType == 'V') {
       if (money != 0) await createRecord(recordData);
       money = 0;
+      note = '';
     } else if (money == 0) {
       money = buttonType;
     } else {
       money = money + buttonType;
     }
-    setRecordData((record) => ({...record, money}));
+    setRecordData((record) => ({...record, money, note}));
   };
 
   return (
