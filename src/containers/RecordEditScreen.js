@@ -10,6 +10,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 
 import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
@@ -47,6 +48,7 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
       money = money + buttonType;
     }
     setRecordData((record) => ({...record, money, note}));
+    if (buttonType == 'V') Alert.alert('新增成功');
   };
 
   return (
