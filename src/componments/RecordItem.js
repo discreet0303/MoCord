@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import _ from 'lodash';
 import moment from 'moment';
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 5,
-    paddingHorizontal: 20,
+    paddingLeft: 20,
     marginVertical: 2,
     backgroundColor: '#ffffff',
     shadowColor: '#000',
@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
+    height: 40,
   },
   leftBlock: {
     flexDirection: 'row',
@@ -30,12 +31,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   rightBlock: {
+    flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
 });
 
-const RecordItem = ({record}) => {
+const RecordItem = ({record, handleRecordDelete}) => {
   const typeIndex = _.findIndex(DEFAULT_RECORD_TYPE, ['name', record.type]);
   const recordType = DEFAULT_RECORD_TYPE[typeIndex];
 
@@ -51,6 +53,18 @@ const RecordItem = ({record}) => {
       </View>
       <View style={styles.rightBlock}>
         <Text style={{fontSize: 22}}>${record.money}</Text>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#DDDDDD',
+            height: 40,
+            width: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: 5,
+          }}
+          onPress={() => handleRecordDelete(record)}>
+          <Text>DE</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

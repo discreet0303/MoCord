@@ -82,7 +82,7 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
         );
       })}
       <TextInput
-        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        style={{borderColor: 'gray', borderWidth: 1, fontSize: 20}}
         onChangeText={(note) =>
           setRecordData((record) => ({
             ...record,
