@@ -3,7 +3,7 @@ import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
 import _ from 'lodash';
 
 import RecordItem from '../componments/RecordItem';
-import {getRecords} from '../utils/fileManager';
+import {getTodayRecords, storeRecords} from '../utils/fileManager';
 
 const styles = StyleSheet.create({
   root: {
@@ -35,22 +35,35 @@ const RecordListScreen = ({navigation}) => {
 
   React.useEffect(() => {
     const runAsync = async () => {
-      const res = await getRecords();
+      const res = await getTodayRecords();
       setRecords(res);
     };
 
     runAsync();
-  });
+  }, []);
+
+  const handleRecordDelete = (record) => {
+    const recordData = _.filter(records, (item) => item !== record);
+    console.log(recordData);
+    setRecords(recordData);
+    storeRecords(recordData);
+  };
 
   return (
     <View style={styles.root}>
       <View style={{width: '100%'}}>
         {_.map(records, (record, idx) => {
-          return <RecordItem key={idx} record={record} />;
+          return (
+            <RecordItem
+              key={idx}
+              record={record}
+              handleRecordDelete={handleRecordDelete}
+            />
+          );
         })}
       </View>
       <View>
-        {!_.isEmpty(records) && <EmptyRecordButton navigation={navigation} />}
+        <EmptyRecordButton navigation={navigation} />
       </View>
       <Button
         title="Go to Record Edit Screen"

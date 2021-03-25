@@ -1,31 +1,28 @@
-import RNFS from 'react-native-fs';
+import RNFetchBlob from 'rn-fetch-blob';
 import {Platform} from 'react-native';
 import moment from 'moment';
 import _ from 'lodash';
 
-const dir = RNFS.ExternalDirectoryPath;
-const filename = moment().format('YYYY-MM-DD') + '.json';
-const filePath = dir + '/' + filename;
+const _DIR = RNFetchBlob.fs.dirs.SDCardApplicationDir;
+const _FILENAME = '2021-03-24.json';
+const _FILE_PATH = _DIR + '/files/' + _FILENAME;
 
 export const createRecord = async (record) => {
-  const records = await getRecords();
-  records.push(record);
-  storeRecords(records);
+  const data = await getTodayRecords();
+  console.log(data);
+  data.push(record);
+  storeRecords(data);
 };
 
 export const storeRecords = (records) => {
-  RNFS.writeFile(filePath, JSON.stringify(records), 'utf8')
-    .then((success) => {
-      console.log('FILE WRITTEN!');
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+  RNFetchBlob.fs.writeFile(_FILE_PATH, JSON.stringify(records), 'utf8');
 };
 
-export const getRecords = async () => {
-  const fileExist = await RNFS.exists(filePath);
-  if (!fileExist) await storeRecords([]);
-
-  return await RNFS.readFile(filePath, 'utf8').then((res) => JSON.parse(res));
+export const getTodayRecords = async () => {
+  RNFetchBlob.fs.exists(_FILE_PATH).then((exist) => {
+    if (!exist) storeRecords([]);
+  });
+  return await RNFetchBlob.fs
+    .readFile(_FILE_PATH, 'utf-8')
+    .then((data) => JSON.parse(data));
 };
