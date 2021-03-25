@@ -9,7 +9,6 @@ const _FILE_PATH = _DIR + '/files/' + _FILENAME;
 
 export const createRecord = async (record) => {
   const data = await getTodayRecords();
-  console.log(data);
   data.push(record);
   storeRecords(data);
 };
@@ -23,6 +22,6 @@ export const getTodayRecords = async () => {
     if (!exist) storeRecords([]);
   });
   return await RNFetchBlob.fs
-    .readFile(_FILE_PATH, 'utf-8')
+    .readFile(_FILE_PATH, 'utf8')
     .then((data) => JSON.parse(data));
 };

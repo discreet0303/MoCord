@@ -1,21 +1,29 @@
 import * as React from 'react';
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import recordsReducer from './reducers/RecordsReducer';
+
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import RecordListScreen from './containers/RecordListScreen';
 import RecordEditScreen from './containers/RecordEditScreen';
 
+const store = createStore(recordsReducer, applyMiddleware(thunk));
+
 const Stack = createStackNavigator();
 
 const App = () => {
-  React.useEffect(() => {});
   return (
-    <NavigationContainer>
-      <Stack.Navigator headerMode="none">
-        <Stack.Screen name="RecordList" component={RecordListScreen} />
-        <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator headerMode="none">
+          <Stack.Screen name="RecordList" component={RecordListScreen} />
+          <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

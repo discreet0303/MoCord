@@ -12,9 +12,10 @@ import {
   Platform,
   Alert,
 } from 'react-native';
+import {useDispatch} from 'react-redux';
+import {addRecord} from '../actions/recordsAction';
 
 import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
-import {createRecord} from '../utils/fileManager';
 import HeaderNav from '../componments/HeaderNav';
 import GoBack from '../componments/nav/GoBack';
 
@@ -34,6 +35,7 @@ const RECORD_INIT = {
 
 const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
   const [recordData, setRecordData] = useState(reocrd);
+  const dispatch = useDispatch();
 
   const handleCalculator = async (buttonType) => {
     let money = recordData.money;
@@ -41,7 +43,7 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
     if (buttonType == 'AC') {
       money = 0;
     } else if (buttonType == 'V') {
-      if (money != 0) await createRecord(recordData);
+      if (money != 0) dispatch(addRecord(recordData));
       money = 0;
       note = '';
     } else if (money == 0) {
