@@ -15,6 +15,8 @@ import {
 
 import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
 import {createRecord} from '../utils/fileManager';
+import HeaderNav from '../componments/HeaderNav';
+import GoBack from '../componments/nav/GoBack';
 
 const calculatorData = [
   [{text: '7'}, {text: '8'}, {text: '9'}, {text: 'AC'}],
@@ -52,63 +54,68 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={-100}
-      style={{flex: 1}}>
-      <Text style={styles.recordText}>${recordData.money}</Text>
-      {_.map(_.chunk(DEFAULT_RECORD_TYPE, 4), (rowData, rowIdx) => {
-        return (
-          <View key={rowIdx} style={{flexDirection: 'row'}}>
-            {_.map(rowData, (recordItem, recordItemIdx) => (
-              <TouchableOpacity
-                key={recordItemIdx}
-                style={[
-                  styles.recordTypeItem,
-                  recordData.type == recordItem.name
-                    ? styles.recordTypeItemActive
-                    : styles.recordTypeItemInactive,
-                ]}
-                onPress={() =>
-                  setRecordData((record) => ({
-                    ...record,
-                    type: recordItem.name,
-                  }))
-                }>
-                <Text style={[styles.recordTypeText]}>{recordItem.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        );
-      })}
-      <TextInput
-        style={{borderColor: 'gray', borderWidth: 1, fontSize: 20}}
-        onChangeText={(note) =>
-          setRecordData((record) => ({
-            ...record,
-            note,
-          }))
-        }
-        value={recordData.note}
-      />
-
-      <View style={styles.numberRoot}>
-        {_.map(calculatorData, (rowData, rowIdx) => {
+    <>
+      <HeaderNav title={'新增紀錄'} leftSection={<GoBack />} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={-100}
+        style={{flex: 1}}>
+        <Text style={styles.recordText}>${recordData.money}</Text>
+        {_.map(_.chunk(DEFAULT_RECORD_TYPE, 4), (rowData, rowIdx) => {
           return (
-            <View key={rowIdx} style={styles.numberRow}>
-              {_.map(rowData, (item, itemIdx) => (
+            <View key={rowIdx} style={{flexDirection: 'row'}}>
+              {_.map(rowData, (recordItem, recordItemIdx) => (
                 <TouchableOpacity
-                  key={itemIdx}
-                  onPress={() => handleCalculator(item.text)}
-                  style={[styles.numberItem]}>
-                  <Text style={[styles.numberItemText]}>{item.text}</Text>
+                  key={recordItemIdx}
+                  style={[
+                    styles.recordTypeItem,
+                    recordData.type == recordItem.name
+                      ? styles.recordTypeItemActive
+                      : styles.recordTypeItemInactive,
+                  ]}
+                  onPress={() =>
+                    setRecordData((record) => ({
+                      ...record,
+                      type: recordItem.name,
+                    }))
+                  }>
+                  <Text style={[styles.recordTypeText]}>
+                    {recordItem.label}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
           );
         })}
-      </View>
-    </KeyboardAvoidingView>
+        <TextInput
+          style={{borderColor: 'gray', borderWidth: 1, fontSize: 20}}
+          onChangeText={(note) =>
+            setRecordData((record) => ({
+              ...record,
+              note,
+            }))
+          }
+          value={recordData.note}
+        />
+
+        <View style={styles.numberRoot}>
+          {_.map(calculatorData, (rowData, rowIdx) => {
+            return (
+              <View key={rowIdx} style={styles.numberRow}>
+                {_.map(rowData, (item, itemIdx) => (
+                  <TouchableOpacity
+                    key={itemIdx}
+                    onPress={() => handleCalculator(item.text)}
+                    style={[styles.numberItem]}>
+                    <Text style={[styles.numberItemText]}>{item.text}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            );
+          })}
+        </View>
+      </KeyboardAvoidingView>
+    </>
   );
 };
 

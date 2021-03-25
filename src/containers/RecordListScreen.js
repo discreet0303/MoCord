@@ -2,8 +2,10 @@ import React from 'react';
 import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
 import _ from 'lodash';
 
+import HeaderNav from '../componments/HeaderNav';
 import RecordItem from '../componments/RecordItem';
 import {getTodayRecords, storeRecords} from '../utils/fileManager';
+import moment from 'moment';
 
 const styles = StyleSheet.create({
   root: {
@@ -50,26 +52,29 @@ const RecordListScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.root}>
-      <View style={{width: '100%'}}>
-        {_.map(records, (record, idx) => {
-          return (
-            <RecordItem
-              key={idx}
-              record={record}
-              handleRecordDelete={handleRecordDelete}
-            />
-          );
-        })}
+    <>
+      <HeaderNav title={moment().format('YYYY/MM/DD')} />
+      <View style={styles.root}>
+        <View style={{width: '100%'}}>
+          {_.map(records, (record, idx) => {
+            return (
+              <RecordItem
+                key={idx}
+                record={record}
+                handleRecordDelete={handleRecordDelete}
+              />
+            );
+          })}
+        </View>
+        <View>
+          <EmptyRecordButton navigation={navigation} />
+        </View>
+        <Button
+          title="Go to Record Edit Screen"
+          onPress={() => navigation.navigate('RecordEdit')}
+        />
       </View>
-      <View>
-        <EmptyRecordButton navigation={navigation} />
-      </View>
-      <Button
-        title="Go to Record Edit Screen"
-        onPress={() => navigation.navigate('RecordEdit')}
-      />
-    </View>
+    </>
   );
 };
 

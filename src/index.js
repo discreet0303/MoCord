@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -12,7 +11,7 @@ const App = () => {
   React.useEffect(() => {});
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator headerMode="none">
         <Stack.Screen name="RecordList" component={RecordListScreen} />
         <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
       </Stack.Navigator>
