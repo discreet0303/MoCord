@@ -13,18 +13,12 @@ import {
   Alert,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {addRecord} from '../actions/recordsAction';
+import {addRecord, setRecord} from '../actions/recordsAction';
 
 import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
 import HeaderNav from '../componments/HeaderNav';
 import GoBack from '../componments/nav/GoBack';
-
-const calculatorData = [
-  [{text: '7'}, {text: '8'}, {text: '9'}, {text: 'AC'}],
-  [{text: '4'}, {text: '5'}, {text: '6'}, {text: 'x'}],
-  [{text: '1'}, {text: '2'}, {text: '3'}, {text: 'x'}],
-  [{text: 'x'}, {text: '0'}, {text: 'x'}, {text: 'V'}],
-];
+import Calculator from '../componments/Calculator';
 
 const RECORD_INIT = {
   datetime: moment().format('YYYY-MM-DD HH:mm'),
@@ -89,6 +83,7 @@ const styles = StyleSheet.create({
 
 const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
   const [recordData, setRecordData] = useState(reocrd);
+  const [mathStack, setMathStack] = useState([]);
   const dispatch = useDispatch();
 
   const handleCalculator = async (buttonType) => {
@@ -109,6 +104,23 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
     if (buttonType == 'V') Alert.alert('新增成功');
   };
 
+  React.useEffect(() => {
+    setRecordData((data) => {
+      const money = mathCalculate(mathStack);
+      return {
+        ...data,
+        money,
+      };
+    });
+  }, [mathStack]);
+
+  const recordHandler = () => {
+    console.log(123);
+    if (recordData.money === 0) return;
+    dispatch(addRecord(recordData));
+    setRecordData(RECORD_INIT);
+  };
+
   return (
     <>
       <HeaderNav title={'新增紀錄'} leftSection={<GoBack />} />
@@ -117,6 +129,7 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
         keyboardVerticalOffset={-100}
         style={{flex: 1}}>
         <Text style={styles.recordText}>${recordData.money}</Text>
+        <Text style={styles.recordText}>{_.join(mathStack, '')}</Text>
         {_.map(_.chunk(DEFAULT_RECORD_TYPE, 4), (rowData, rowIdx) => {
           return (
             <View key={rowIdx} style={{flexDirection: 'row'}}>
@@ -153,22 +166,12 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
           }
           value={recordData.note}
         />
-
         <View style={styles.numberRoot}>
-          {_.map(calculatorData, (rowData, rowIdx) => {
-            return (
-              <View key={rowIdx} style={styles.numberRow}>
-                {_.map(rowData, (item, itemIdx) => (
-                  <TouchableOpacity
-                    key={itemIdx}
-                    onPress={() => handleCalculator(item.text)}
-                    style={[styles.numberItem]}>
-                    <Text style={[styles.numberItemText]}>{item.text}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            );
-          })}
+          <Calculator
+            mathStack={mathStack}
+            setMathStack={setMathStack}
+            recordHandler={recordHandler}
+          />
         </View>
       </KeyboardAvoidingView>
     </>
