@@ -4,15 +4,12 @@ import {
   storeRecords,
 } from '../utils/fileManager';
 
-export const fetchRecord = () => {
-  return (dispatch) => {
-    getTodayRecords().then((res) => {
-      dispatch({
-        type: 'FETCH_RECORD',
-        payload: res,
-      });
-    });
-  };
+export const fetchRecord = () => async (dispatch) => {
+  const data = await getTodayRecords();
+  dispatch({
+    type: 'FETCH_RECORD',
+    payload: data,
+  });
 };
 
 export const addRecord = (record) => {
