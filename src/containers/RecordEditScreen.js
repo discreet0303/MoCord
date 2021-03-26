@@ -33,6 +33,60 @@ const RECORD_INIT = {
   note: '',
 };
 
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  recordText: {
+    fontSize: 45,
+    textAlign: 'right',
+    marginVertical: 3,
+    marginRight: 5,
+  },
+  recordTypeRow: {
+    flexDirection: 'row',
+  },
+  recordTypeItem: {
+    width: '25%',
+  },
+  recordTypeItemActive: {
+    width: '25%',
+    backgroundColor: 'gray',
+  },
+  recordTypeItemInactive: {
+    width: '25%',
+  },
+  recordTypeText: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    height: 45,
+    fontSize: 20,
+  },
+  numberRoot: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  numberRow: {
+    flexDirection: 'row',
+    backgroundColor: '#282c34',
+  },
+  numberItem: {
+    flex: 1,
+  },
+  numberItemText: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    height: 45,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#f7f7f7',
+  },
+  divide: {
+    height: 1,
+    backgroundColor: '#b3b3b3',
+  },
+});
+
 const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
   const [recordData, setRecordData] = useState(reocrd);
   const dispatch = useDispatch();
@@ -120,59 +174,5 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  recordText: {
-    fontSize: 45,
-    textAlign: 'right',
-    marginVertical: 3,
-    marginRight: 5,
-  },
-  recordTypeRow: {
-    flexDirection: 'row',
-  },
-  recordTypeItem: {
-    width: '25%',
-  },
-  recordTypeItemActive: {
-    width: '25%',
-    backgroundColor: 'gray',
-  },
-  recordTypeItemInactive: {
-    width: '25%',
-  },
-  recordTypeText: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    height: 45,
-    fontSize: 20,
-  },
-  numberRoot: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  numberRow: {
-    flexDirection: 'row',
-    backgroundColor: '#282c34',
-  },
-  numberItem: {
-    flex: 1,
-  },
-  numberItemText: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    height: 45,
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#f7f7f7',
-  },
-  divide: {
-    height: 1,
-    backgroundColor: '#b3b3b3',
-  },
-});
 
 export default RecordEditScreen;

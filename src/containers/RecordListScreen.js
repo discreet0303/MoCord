@@ -1,14 +1,13 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import _ from 'lodash';
 
 import HeaderNav from '../componments/HeaderNav';
 import RecordItem from '../componments/RecordItem';
-import {storeRecords} from '../utils/fileManager';
 import moment from 'moment';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchRecord, addRecord, setRecord} from '../actions/recordsAction';
+import {fetchRecord, setRecord} from '../actions/recordsAction';
 
 const styles = StyleSheet.create({
   root: {
@@ -69,26 +68,6 @@ const RecordListScreen = ({navigation}) => {
         <View>
           <EmptyRecordButton navigation={navigation} />
         </View>
-        <Button
-          title="Go to Record Edit Screen"
-          onPress={() => navigation.navigate('RecordEdit')}
-        />
-        <Button title="Cur val" onPress={() => console.log(records)} />
-        <Button
-          title="Tesst Redux add"
-          onPress={() => {
-            console.log('add', counter);
-            dispatch(addRecord({datetime: '2020-20-20', type: 'food'}));
-          }}
-        />
-        <Button
-          title="Tesst Redux set"
-          onPress={() => {
-            console.log('set be', counter);
-            dispatch(setRecord([]));
-            console.log('set af', counter);
-          }}
-        />
       </View>
     </>
   );

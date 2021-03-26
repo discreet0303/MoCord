@@ -11,10 +11,10 @@ const recordsReducer = (state = INITIAL_STATE, action) => {
         records: action.payload,
       };
     case 'ADD_RECORD':
-      const {records} = state;
-      records.push(action.payload);
-      const newState = {records};
-      return newState;
+      return {
+        ...state,
+        records: [...state.records, action.payload],
+      };
     case 'SET_RECORD':
       return {records: action.payload};
     default:
