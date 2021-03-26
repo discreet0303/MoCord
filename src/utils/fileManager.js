@@ -4,7 +4,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 const _DIR = RNFetchBlob.fs.dirs.SDCardApplicationDir;
-const _FILENAME = '2021-03-24.json';
+const _FILENAME = moment().format('YYYY-MM-DD') + '.json';
 const _FILE_PATH = _DIR + '/files/' + _FILENAME;
 
 export const createRecord = async (record) => {
@@ -19,7 +19,8 @@ export const storeRecords = (records) => {
 
 export const getTodayRecords = async () => {
   RNFetchBlob.fs.exists(_FILE_PATH).then((exist) => {
-    if (!exist) storeRecords([]);
+    if (!exist)
+      RNFetchBlob.fs.createFile(_FILE_PATH, JSON.stringify([]), 'utf8');
   });
   return await RNFetchBlob.fs
     .readFile(_FILE_PATH, 'utf8')
