@@ -115,10 +115,11 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
   }, [mathStack]);
 
   const recordHandler = () => {
-    console.log(123);
     if (recordData.money === 0) return;
     dispatch(addRecord(recordData));
     setRecordData(RECORD_INIT);
+    setMathStack([]);
+    Alert.alert('新增成功');
   };
 
   return (

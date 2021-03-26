@@ -8,7 +8,7 @@ const calculatorData = [
   [{text: '7'}, {text: '8'}, {text: '9'}, {text: 'AC'}],
   [{text: '4'}, {text: '5'}, {text: '6'}, {text: '+'}],
   [{text: '1'}, {text: '2'}, {text: '3'}, {text: '-'}],
-  [{text: 'x'}, {text: '0'}, {text: 'x'}, {text: 'V'}],
+  [{text: 'x'}, {text: '0'}, {text: 'x'}, {text: 'v'}],
 ];
 
 const operator = ['+', '-'];
@@ -31,8 +31,6 @@ const styles = StyleSheet.create({
 });
 
 const Calculator = ({mathStack, setMathStack, recordHandler}) => {
-  // const [mathStack, setMathStack] = React.useState([]);
-
   const handler = (text) => {
     let _mathStack = _.cloneDeep(mathStack);
     if (text === 'v') {
