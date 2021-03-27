@@ -15,6 +15,18 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  totalSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+  },
+  totalText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
   emptyRecordButton: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -53,6 +65,12 @@ const RecordListScreen = ({navigation}) => {
   return (
     <>
       <HeaderNav title={moment().format('YYYY/MM/DD')} />
+      <View style={styles.totalSection}>
+        <Text style={styles.totalText}>總和</Text>
+        <Text style={styles.totalText}>
+          {_.sum(_.map(records, (record) => record.money))}
+        </Text>
+      </View>
       <View style={styles.root}>
         <View style={{width: '100%'}}>
           {_.map(records, (record, idx) => {

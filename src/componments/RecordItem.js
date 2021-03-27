@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import _ from 'lodash';
-import moment from 'moment';
 
 import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
 
