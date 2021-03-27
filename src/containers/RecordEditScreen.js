@@ -13,7 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {addRecord, setRecord} from '../actions/recordsAction';
+import {addRecord, updateRecord} from '../actions/recordsAction';
 
 import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
 import HeaderNav from '../componments/HeaderNav';
@@ -81,9 +81,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
-  const [recordData, setRecordData] = useState(reocrd);
-  const [mathStack, setMathStack] = useState([]);
+const RecordEditScreen = ({navigation, route}) => {
+  const _record = route.params ? route.params.record : RECORD_INIT;
+  const _mathStack = route.params ? _.split(route.params.record.money) : [];
+  const _mode = route.params ? true : false;
+  const screenTitle = route.params ? '編輯紀錄' : '新增紀錄';
+
+  const [recordData, setRecordData] = useState(_record);
+  const [mathStack, setMathStack] = useState(_mathStack);
   const dispatch = useDispatch();
 
   const handleCalculator = async (buttonType) => {
@@ -116,15 +121,34 @@ const RecordEditScreen = ({navigation, reocrd = RECORD_INIT}) => {
 
   const recordHandler = () => {
     if (recordData.money === 0) return;
-    dispatch(addRecord(recordData));
-    setRecordData(RECORD_INIT);
-    setMathStack([]);
-    Alert.alert('新增成功');
+    if (_mode) {
+      dispatch(updateRecord(recordData));
+      Alert.alert(
+        '更新成功',
+        '',
+        [
+          {
+            text: '好',
+            onPress: () => navigation.navigate('RecordList'),
+            style: 'cancel',
+          },
+        ],
+        {
+          cancelable: true,
+          onDismiss: () => navigation.navigate('RecordList'),
+        },
+      );
+    } else {
+      dispatch(addRecord(recordData));
+      setRecordData(RECORD_INIT);
+      setMathStack([]);
+      Alert.alert('新增成功');
+    }
   };
 
   return (
     <>
-      <HeaderNav title={'新增紀錄'} leftSection={<GoBack />} />
+      <HeaderNav title={screenTitle} leftSection={<GoBack />} />
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={-100}

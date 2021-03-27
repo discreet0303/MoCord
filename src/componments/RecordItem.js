@@ -2,6 +2,9 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import _ from 'lodash';
+import {useNavigation} from '@react-navigation/native';
+
+import {useDispatch} from 'react-redux';
 
 import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
 
@@ -37,8 +40,13 @@ const styles = StyleSheet.create({
 });
 
 const RecordItem = ({record, handleRecordDelete}) => {
+  const navigation = useNavigation();
   const typeIndex = _.findIndex(DEFAULT_RECORD_TYPE, ['name', record.type]);
   const recordType = DEFAULT_RECORD_TYPE[typeIndex];
+
+  const handleRecordEdit = (record) => {
+    navigation.push('RecordEdit', {record});
+  };
 
   return (
     <View style={styles.root}>
@@ -55,6 +63,18 @@ const RecordItem = ({record, handleRecordDelete}) => {
         <TouchableOpacity
           style={{
             backgroundColor: '#DDDDDD',
+            height: 40,
+            width: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginLeft: 5,
+          }}
+          onPress={() => handleRecordEdit(record)}>
+          <Text>ED</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#999999',
             height: 40,
             width: 50,
             justifyContent: 'center',
