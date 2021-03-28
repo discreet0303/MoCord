@@ -128,15 +128,57 @@ const RecordEditScreen = ({navigation, route}) => {
     }
   };
 
+  const renderMoneySection = () => {
+    const isExistOperater = _.intersection(['+', '-', 'x', '/'], mathStack);
+    return (
+      <View
+        style={{
+          height: 80,
+          justifyContent: 'center',
+          marginRight: 10,
+        }}>
+        {isExistOperater.length > 0 ? (
+          <>
+            <Text
+              style={{
+                fontSize: 25,
+                textAlign: 'right',
+                color: '#ceaf57',
+              }}>
+              {_.join(mathStack, '')}
+            </Text>
+            <Text
+              style={{
+                fontSize: 40,
+                textAlign: 'right',
+                marginTop: -10,
+                color: '#525252',
+              }}>
+              ${recordData.money}
+            </Text>
+          </>
+        ) : (
+          <Text
+            style={{
+              fontSize: 45,
+              textAlign: 'right',
+              color: '#525252',
+            }}>
+            ${recordData.money}
+          </Text>
+        )}
+      </View>
+    );
+  };
+
   return (
     <>
       <HeaderNav title={screenTitle} leftSection={<GoBack />} />
       <KeyboardAvoidingView
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={-100}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}
+        keyboardVerticalOffset={-200}
         style={{flex: 1}}>
-        <Text style={styles.recordText}>${recordData.money}</Text>
-        <Text style={styles.recordText}>{_.join(mathStack, '')}</Text>
+        {renderMoneySection()}
         {_.map(_.chunk(DEFAULT_RECORD_TYPE, 4), (rowData, rowIdx) => {
           return (
             <View key={rowIdx} style={{flexDirection: 'row'}}>
