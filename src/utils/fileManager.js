@@ -43,9 +43,7 @@ export const getRecordsByDate = async (date) => {
 };
 
 export const createRecordByDate = async (date, record) => {
-  const DATE_FILENAME =
-    _DIR + '/files/' + moment(date).format('YYYY-MM-DD') + '.json';
-  const recordsData = await getRecordsByDate(DATE_FILENAME);
+  const recordsData = await getRecordsByDate(date);
   recordsData.push(record);
   storeRecordByDate(date, recordsData);
 };

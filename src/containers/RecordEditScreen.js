@@ -88,9 +88,9 @@ const RecordEditScreen = ({navigation, route}) => {
   const _record = _mode ? route.params.record : RECORD_INIT;
   const _mathStack = _mode ? _.split(route.params.record.money) : [];
 
-  _record.datetime =
-    _.has(route.params, 'date') &&
-    moment(route.params.date).format('YYYY-MM-DD HH:mm');
+  _record.datetime = _.has(route.params, 'date')
+    ? moment(route.params.date).format('YYYY-MM-DD HH:mm')
+    : _record.datetime;
   console.log('_record', _record);
 
   const [recordData, setRecordData] = useState(_record);
@@ -110,12 +110,7 @@ const RecordEditScreen = ({navigation, route}) => {
   const recordHandler = () => {
     if (recordData.money === 0) return;
     if (_mode) {
-      dispatch(
-        updateRecord(
-          moment(recordData.datetime).format('YYYY-MM-DD'),
-          recordData,
-        ),
-      );
+      dispatch(updateRecord(recordData));
       Alert.alert(
         '更新成功',
         '',

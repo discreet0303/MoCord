@@ -1,10 +1,12 @@
 import _ from 'lodash';
+import moment from 'moment';
 import {
   getTodayRecords,
   createRecord,
   storeRecords,
   getRecordsByDate,
   createRecordByDate,
+  storeRecordByDate,
 } from '../utils/fileManager';
 
 export const fetchRecord = (date) => async (dispatch) => {
@@ -25,18 +27,19 @@ export const addRecord = (record) => {
 };
 
 export const updateRecord = (record) => async (dispatch) => {
-  const data = await getTodayRecords();
-  const idx = _.findIndex(data, ['id', record.id]);
-  data[idx] = record;
-  storeRecords(data);
+  const date = moment(record.datetime).format('YYYY-MM-DD');
+  const recordsData = await getRecordsByDate(date);
+  const idx = _.findIndex(recordsData, ['id', record.id]);
+  recordsData[idx] = record;
+  storeRecordByDate(date, recordsData);
   dispatch({
     type: 'SET_RECORD',
-    payload: data,
+    payload: recordsData,
   });
 };
 
 export const setRecord = (records) => {
-  storeRecords(records);
+  // storeRecords(records);
   return {
     type: 'SET_RECORD',
     payload: records,
