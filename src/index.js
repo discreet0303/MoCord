@@ -9,6 +9,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import RecordListScreen from './containers/RecordListScreen';
 import RecordEditScreen from './containers/RecordEditScreen';
+import TestModal from './containers/modal/TestModal';
 
 const store = createStore(recordsReducer, applyMiddleware(thunk));
 
@@ -21,6 +22,7 @@ const App = () => {
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="RecordList" component={RecordListScreen} />
           <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
+          <Stack.Screen name="TestModal" component={TestModal} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

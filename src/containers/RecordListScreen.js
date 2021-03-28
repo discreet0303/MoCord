@@ -1,13 +1,16 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import _ from 'lodash';
+import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 
-import HeaderNav from '../componments/HeaderNav';
-import RecordItem from '../componments/RecordItem';
+import _ from 'lodash';
 import moment from 'moment';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchRecord, setRecord} from '../actions/recordsAction';
+
+import HeaderNav from '../componments/HeaderNav';
+import RecordItem from '../componments/RecordItem';
+import TestM from '../componments/modal/TestM';
 
 const styles = StyleSheet.create({
   root: {
@@ -49,6 +52,13 @@ const EmptyRecordButton = ({navigation}) => (
 const RecordListScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const records = useSelector((state) => state.records.records);
+  const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));
+
+  const [isModalVisible, setModalVisible] = React.useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   React.useEffect(() => {
     const runAsync = async () => {
@@ -64,7 +74,25 @@ const RecordListScreen = ({navigation}) => {
 
   return (
     <>
-      <HeaderNav title={moment().format('YYYY/MM/DD')} />
+      <HeaderNav title={moment(date).format('YYYY/MM/DD')} />
+      <Calendar
+        current={date}
+        monthFormat={'yyyy/MM'}
+        onDayPress={(day) => setDate(day.dateString)}
+        markingType={'custom'}
+        markedDates={{
+          [date]: {
+            customStyles: {
+              container: {
+                backgroundColor: '#00adf5',
+              },
+              text: {
+                color: 'white',
+              },
+            },
+          },
+        }}
+      />
       <View style={styles.totalSection}>
         <Text style={styles.totalText}>總和</Text>
         <Text style={styles.totalText}>
@@ -86,6 +114,12 @@ const RecordListScreen = ({navigation}) => {
         <View>
           <EmptyRecordButton navigation={navigation} />
         </View>
+        {/* <Button title="Modal" onPress={() => setModalVisible((m) => !m)} />
+        <TestM
+          headerTitle={moment().format('YYYY/MM/DD')}
+          isModalVisible={isModalVisible}
+          toggleModal={toggleModal}
+        /> */}
       </View>
     </>
   );
