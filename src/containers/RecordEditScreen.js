@@ -91,24 +91,6 @@ const RecordEditScreen = ({navigation, route}) => {
   const [mathStack, setMathStack] = useState(_mathStack);
   const dispatch = useDispatch();
 
-  const handleCalculator = async (buttonType) => {
-    let money = recordData.money;
-    let note = recordData.note;
-    if (buttonType == 'AC') {
-      money = 0;
-    } else if (buttonType == 'V') {
-      if (money != 0) dispatch(addRecord(recordData));
-      money = 0;
-      note = '';
-    } else if (money == 0) {
-      money = buttonType;
-    } else {
-      money = money + buttonType;
-    }
-    setRecordData((record) => ({...record, money, note}));
-    if (buttonType == 'V') Alert.alert('新增成功');
-  };
-
   React.useEffect(() => {
     setRecordData((data) => {
       const money = mathCalculate(mathStack);

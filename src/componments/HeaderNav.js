@@ -1,12 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   root: {
     height: 45,
     backgroundColor: '#f0f0f0',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 3,
     paddingHorizontal: 10,
@@ -18,6 +17,9 @@ const styles = StyleSheet.create({
     shadowRadius: 9.51,
     elevation: 15,
   },
+  flex1: {
+    flex: 1,
+  },
   title: {
     fontSize: 20,
     fontWeight: '700',
@@ -27,9 +29,9 @@ const styles = StyleSheet.create({
 const HeaderNav = ({title = '', leftSection, rightSection}) => {
   return (
     <View style={styles.root}>
-      <View>{leftSection}</View>
+      <View style={styles.flex1}>{leftSection}</View>
       <Text style={styles.title}>{title}</Text>
-      <View>{rightSection}</View>
+      <View style={styles.flex1}>{rightSection}</View>
     </View>
   );
 };
