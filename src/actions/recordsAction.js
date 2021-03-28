@@ -3,11 +3,12 @@ import {
   getTodayRecords,
   createRecord,
   storeRecords,
-  getDateRecords,
+  getRecordsByDate,
+  createRecordByDate,
 } from '../utils/fileManager';
 
 export const fetchRecord = (date) => async (dispatch) => {
-  const data = await getDateRecords(date);
+  const data = await getRecordsByDate(date);
   dispatch({
     type: 'FETCH_RECORD',
     payload: data,
@@ -16,7 +17,7 @@ export const fetchRecord = (date) => async (dispatch) => {
 
 export const addRecord = (record) => {
   record.id = _.uniqueId();
-  createRecord(record);
+  createRecordByDate(record.datetime, record);
   return {
     type: 'ADD_RECORD',
     payload: record,
@@ -25,10 +26,8 @@ export const addRecord = (record) => {
 
 export const updateRecord = (record) => async (dispatch) => {
   const data = await getTodayRecords();
-  console.log('before', data);
   const idx = _.findIndex(data, ['id', record.id]);
   data[idx] = record;
-  console.log('after', data);
   storeRecords(data);
   dispatch({
     type: 'SET_RECORD',

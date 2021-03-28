@@ -27,7 +27,7 @@ export const getTodayRecords = async () => {
     .then((data) => JSON.parse(data));
 };
 
-export const getDateRecords = async (date) => {
+export const getRecordsByDate = async (date) => {
   const DATE_FILENAME =
     _DIR + '/files/' + moment(date).format('YYYY-MM-DD') + '.json';
   RNFetchBlob.fs.exists(DATE_FILENAME).then((exist) => {
@@ -40,4 +40,18 @@ export const getDateRecords = async (date) => {
   return await RNFetchBlob.fs
     .readFile(DATE_FILENAME, 'utf8')
     .then((data) => JSON.parse(data));
+};
+
+export const createRecordByDate = async (date, record) => {
+  const DATE_FILENAME =
+    _DIR + '/files/' + moment(date).format('YYYY-MM-DD') + '.json';
+  const recordsData = await getRecordsByDate(DATE_FILENAME);
+  recordsData.push(record);
+  storeRecordByDate(date, recordsData);
+};
+
+export const storeRecordByDate = (date, records) => {
+  const DATE_FILENAME =
+    _DIR + '/files/' + moment(date).format('YYYY-MM-DD') + '.json';
+  RNFetchBlob.fs.writeFile(DATE_FILENAME, JSON.stringify(records), 'utf8');
 };

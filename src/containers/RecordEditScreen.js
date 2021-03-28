@@ -82,10 +82,16 @@ const styles = StyleSheet.create({
 });
 
 const RecordEditScreen = ({navigation, route}) => {
-  const _record = route.params ? route.params.record : RECORD_INIT;
-  const _mathStack = route.params ? _.split(route.params.record.money) : [];
-  const _mode = route.params ? true : false;
-  const screenTitle = route.params ? '編輯紀錄' : '新增紀錄';
+  const _mode = _.has(route.params, 'record') ? true : false;
+  const screenTitle = _.has(route.params, 'record') ? '編輯紀錄' : '新增紀錄';
+
+  const _record = _mode ? route.params.record : RECORD_INIT;
+  const _mathStack = _mode ? _.split(route.params.record.money) : [];
+
+  _record.datetime =
+    _.has(route.params, 'date') &&
+    moment(route.params.date).format('YYYY-MM-DD HH:mm');
+  console.log('_record', _record);
 
   const [recordData, setRecordData] = useState(_record);
   const [mathStack, setMathStack] = useState(_mathStack);
@@ -104,7 +110,12 @@ const RecordEditScreen = ({navigation, route}) => {
   const recordHandler = () => {
     if (recordData.money === 0) return;
     if (_mode) {
-      dispatch(updateRecord(recordData));
+      dispatch(
+        updateRecord(
+          moment(recordData.datetime).format('YYYY-MM-DD'),
+          recordData,
+        ),
+      );
       Alert.alert(
         '更新成功',
         '',

@@ -41,13 +41,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const EmptyRecordButton = ({navigation}) => (
-  <TouchableOpacity
-    style={styles.emptyRecordButton}
-    onPress={() => navigation.navigate('RecordEdit')}>
-    <Text style={{fontSize: 18}}>新增</Text>
-  </TouchableOpacity>
-);
+const EmptyRecordButton = ({navigation, date}) => {
+  return (
+    <TouchableOpacity
+      style={styles.emptyRecordButton}
+      onPress={() => navigation.navigate('RecordEdit', {date: date})}>
+      <Text style={{fontSize: 18}}>新增</Text>
+    </TouchableOpacity>
+  );
+};
 
 const RecordListScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -112,7 +114,7 @@ const RecordListScreen = ({navigation}) => {
           })}
         </View>
         <View>
-          <EmptyRecordButton navigation={navigation} />
+          <EmptyRecordButton navigation={navigation} date={date} />
         </View>
         {/* <Button title="Modal" onPress={() => setModalVisible((m) => !m)} />
         <TestM
