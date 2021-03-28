@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  ScrollView,
+} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 
 import _ from 'lodash';
@@ -101,28 +108,30 @@ const RecordListScreen = ({navigation}) => {
           {_.sum(_.map(records, (record) => record.money))}
         </Text>
       </View>
-      <View style={styles.root}>
-        <View style={{width: '100%'}}>
-          {_.map(records, (record, idx) => {
-            return (
-              <RecordItem
-                key={idx}
-                record={record}
-                handleRecordDelete={handleRecordDelete}
-              />
-            );
-          })}
-        </View>
-        <View>
-          <EmptyRecordButton navigation={navigation} date={date} />
-        </View>
-        {/* <Button title="Modal" onPress={() => setModalVisible((m) => !m)} />
+      <ScrollView>
+        <View style={styles.root}>
+          <View style={{width: '100%'}}>
+            {_.map(records, (record, idx) => {
+              return (
+                <RecordItem
+                  key={idx}
+                  record={record}
+                  handleRecordDelete={handleRecordDelete}
+                />
+              );
+            })}
+          </View>
+          <View>
+            <EmptyRecordButton navigation={navigation} date={date} />
+          </View>
+          {/* <Button title="Modal" onPress={() => setModalVisible((m) => !m)} />
         <TestM
           headerTitle={moment().format('YYYY/MM/DD')}
           isModalVisible={isModalVisible}
           toggleModal={toggleModal}
         /> */}
-      </View>
+        </View>
+      </ScrollView>
     </>
   );
 };
