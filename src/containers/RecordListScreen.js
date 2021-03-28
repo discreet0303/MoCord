@@ -71,7 +71,7 @@ const RecordListScreen = ({navigation}) => {
 
   const handleRecordDelete = (record) => {
     const recordData = _.filter(records, (item) => item !== record);
-    dispatch(setRecord(recordData));
+    dispatch(setRecord(date, recordData));
   };
 
   return (

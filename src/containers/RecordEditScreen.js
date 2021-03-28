@@ -91,7 +91,6 @@ const RecordEditScreen = ({navigation, route}) => {
   _record.datetime = _.has(route.params, 'date')
     ? moment(route.params.date).format('YYYY-MM-DD HH:mm')
     : _record.datetime;
-  console.log('_record', _record);
 
   const [recordData, setRecordData] = useState(_record);
   const [mathStack, setMathStack] = useState(_mathStack);

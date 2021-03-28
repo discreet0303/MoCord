@@ -38,8 +38,9 @@ export const updateRecord = (record) => async (dispatch) => {
   });
 };
 
-export const setRecord = (records) => {
+export const setRecord = (date, records) => {
   // storeRecords(records);
+  storeRecordByDate(date, records);
   return {
     type: 'SET_RECORD',
     payload: records,
