@@ -3,10 +3,11 @@ import {
   getTodayRecords,
   createRecord,
   storeRecords,
+  getDateRecords,
 } from '../utils/fileManager';
 
-export const fetchRecord = () => async (dispatch) => {
-  const data = await getTodayRecords();
+export const fetchRecord = (date) => async (dispatch) => {
+  const data = await getDateRecords(date);
   dispatch({
     type: 'FETCH_RECORD',
     payload: data,

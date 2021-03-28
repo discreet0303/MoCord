@@ -62,10 +62,10 @@ const RecordListScreen = ({navigation}) => {
 
   React.useEffect(() => {
     const runAsync = async () => {
-      dispatch(fetchRecord());
+      dispatch(fetchRecord(date));
     };
     runAsync();
-  }, []);
+  }, [date]);
 
   const handleRecordDelete = (record) => {
     const recordData = _.filter(records, (item) => item !== record);
