@@ -124,6 +124,10 @@ const RecordListScreen = ({navigation}) => {
           <View>
             <EmptyRecordButton navigation={navigation} date={date} />
           </View>
+          <Button
+            title="Stat"
+            onPress={() => navigation.navigate('RecordStatistic')}
+          />
           {/* <Button title="Modal" onPress={() => setModalVisible((m) => !m)} />
         <TestM
           headerTitle={moment().format('YYYY/MM/DD')}

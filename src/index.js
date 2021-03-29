@@ -20,12 +20,12 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator headerMode="none">
+          <Stack.Screen name="RecordList" component={RecordListScreen} />
+          <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
           <Stack.Screen
             name="RecordStatistic"
             component={RecordStatisticScreen}
           />
-          <Stack.Screen name="RecordList" component={RecordListScreen} />
-          <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

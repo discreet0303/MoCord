@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button, ScrollView} from 'react-native';
 
 import _ from 'lodash';
 
 import {getRecordByMonth} from '../utils/fileManager';
 
-const RecordStatisticScreen = () => {
+const RecordStatisticScreen = ({navigation}) => {
   const [monthReocrd, setMonthRecord] = React.useState([]);
 
   React.useEffect(() => {
@@ -17,7 +17,7 @@ const RecordStatisticScreen = () => {
   }, []);
 
   return (
-    <View>
+    <ScrollView>
       {_.map(monthReocrd, (typeData, type) => {
         return (
           <View key={type}>
@@ -33,7 +33,8 @@ const RecordStatisticScreen = () => {
           </View>
         );
       })}
-    </View>
+      <Button title={'Back'} onPress={() => navigation.goBack()} />
+    </ScrollView>
   );
 };
 

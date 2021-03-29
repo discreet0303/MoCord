@@ -1,10 +1,8 @@
 import RNFetchBlob from 'rn-fetch-blob';
-import RNFS from 'react-native-fs';
 import moment from 'moment';
 import _ from 'lodash';
 
 const _DIR = RNFetchBlob.fs.dirs.SDCardApplicationDir;
-const _DIR_RNFS = RNFS.ExternalDirectoryPath;
 const _FILENAME = moment().format('YYYY-MM-DD') + '.json';
 const _TODAY_FILE_PATH = _DIR + '/files/' + _FILENAME;
 
@@ -31,14 +29,13 @@ export const getTodayRecords = async () => {
 export const getRecordsByDate = async (date) => {
   const DATE_FILENAME =
     _DIR + '/files/' + moment(date).format('YYYY-MM-DD') + '.json';
-  RNFS.exists(
-    _DIR_RNFS + '/' + moment(date).format('YYYY-MM-DD') + '.json',
-  ).then((exist) => {
-    if (!exist) {
-      RNFetchBlob.fs.createFile(DATE_FILENAME, JSON.stringify([]), 'utf8');
-      return [];
-    }
-  });
+  const fileExist = await RNFetchBlob.fs
+    .exists(DATE_FILENAME)
+    .then((exist) => exist);
+  if (!fileExist) {
+    await RNFetchBlob.fs.createFile(DATE_FILENAME, JSON.stringify([]), 'utf8');
+    return [];
+  }
   return await RNFetchBlob.fs
     .readFile(DATE_FILENAME, 'utf8')
     .then((data) => JSON.parse(data));
