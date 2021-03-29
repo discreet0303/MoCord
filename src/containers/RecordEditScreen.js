@@ -180,7 +180,7 @@ const RecordEditScreen = ({navigation, route}) => {
     <>
       <HeaderNav title={screenTitle} leftSection={<GoBack />} />
       <KeyboardAvoidingView
-        behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={-200}
         style={{flex: 1}}>
         {renderMoneySection()}
