@@ -105,7 +105,7 @@ const RecordListScreen = ({navigation}) => {
       <View style={styles.totalSection}>
         <Text style={styles.totalText}>總和</Text>
         <Text style={styles.totalText}>
-          {_.sum(_.map(records, (record) => record.money))}
+          {_.sum(_.map(records, (record) => _.toInteger(record.money)))}
         </Text>
       </View>
       <ScrollView>
