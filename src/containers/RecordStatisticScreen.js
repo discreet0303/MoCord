@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, Button, ScrollView, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 
 import _ from 'lodash';
 import moment from 'moment';
@@ -25,7 +32,7 @@ const styles = StyleSheet.create({
 
 const RecordStatisticScreen = ({navigation}) => {
   const year = moment().year();
-  const month = moment().month() + 1;
+  const [month, setMonth] = React.useState(moment().month() + 1);
   const [monthReocrd, setMonthRecord] = React.useState({food: {}, eat: {}});
   const [maxAmount, setMaxAmount] = React.useState(0);
 
@@ -53,11 +60,33 @@ const RecordStatisticScreen = ({navigation}) => {
       setMonthRecord(data);
     };
     runAsync();
-  }, []);
+  }, [month]);
 
   return (
     <ScrollView>
       <HeaderNav title={`${month} 月統計`} />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{paddingVertical: 5}}>
+        {_.map(_.times(12), (monthNum) => (
+          <TouchableOpacity
+            key={monthNum}
+            style={{
+              width: 40,
+              height: 40,
+              justifyContent: 'center',
+              marginHorizontal: 5,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: '#000',
+              backgroundColor: monthNum + 1 === month ? 'gray' : 'white',
+            }}
+            onPress={() => setMonth(monthNum + 1)}>
+            <Text style={{textAlign: 'center'}}>{monthNum + 1}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
       {_.map(monthReocrd, (typeData, type) => {
         return (
           <View key={type} style={styles.statisticRow}>
