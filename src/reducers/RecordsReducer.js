@@ -6,10 +6,6 @@ const INITIAL_STATE = {
 
 const recordsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'FETCH_RECORD':
-      return {
-        records: action.payload,
-      };
     case 'ADD_RECORD':
       return {
         ...state,

@@ -1,9 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
 import {
-  getTodayRecords,
-  createRecord,
-  storeRecords,
   getRecordsByDate,
   createRecordByDate,
   storeRecordByDate,
@@ -12,7 +9,7 @@ import {
 export const fetchRecord = (date) => async (dispatch) => {
   const data = await getRecordsByDate(date);
   dispatch({
-    type: 'FETCH_RECORD',
+    type: 'SET_RECORD',
     payload: data,
   });
 };
@@ -39,7 +36,6 @@ export const updateRecord = (record) => async (dispatch) => {
 };
 
 export const setRecord = (date, records) => {
-  // storeRecords(records);
   storeRecordByDate(date, records);
   return {
     type: 'SET_RECORD',
