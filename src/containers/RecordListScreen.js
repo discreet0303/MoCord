@@ -63,12 +63,6 @@ const RecordListScreen = ({navigation}) => {
   const records = useSelector((state) => state.records.records);
   const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));
 
-  const [isModalVisible, setModalVisible] = React.useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-
   React.useEffect(() => {
     const runAsync = async () => {
       dispatch(fetchRecord(date));
@@ -128,12 +122,6 @@ const RecordListScreen = ({navigation}) => {
             title="Stat"
             onPress={() => navigation.navigate('RecordStatistic')}
           />
-          {/* <Button title="Modal" onPress={() => setModalVisible((m) => !m)} />
-        <TestM
-          headerTitle={moment().format('YYYY/MM/DD')}
-          isModalVisible={isModalVisible}
-          toggleModal={toggleModal}
-        /> */}
         </View>
       </ScrollView>
     </>
