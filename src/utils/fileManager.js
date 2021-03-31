@@ -2,22 +2,28 @@ import RNFetchBlob from 'rn-fetch-blob';
 import moment from 'moment';
 import _ from 'lodash';
 
+/* Global Variable */
 const _DIR = RNFetchBlob.fs.dirs.SDCardApplicationDir;
-const _FILENAME = moment().format('YYYY-MM-DD') + '.json';
-const _TODAY_FILE_PATH = _DIR + '/files/' + _FILENAME;
+const checkFolderExist = async (folderPath) => {
+  const isFolderExist = await RNFetchBlob.fs
+    .exists(folderPath)
+    .then((exist) => exist);
+  if (!isFolderExist) RNFetchBlob.fs.mkdir(folderPath);
+};
+
+/* Record Information Handler */
+const dateToFilename = (date) => moment(date).format('YYYY-MM-DD') + '.json';
+const dateToFilePath = (date) => _DIR + '/files/' + dateToFilename(date);
 
 export const getRecordsByDate = async (date) => {
-  const DATE_FILENAME =
-    _DIR + '/files/' + moment(date).format('YYYY-MM-DD') + '.json';
-  const fileExist = await RNFetchBlob.fs
-    .exists(DATE_FILENAME)
-    .then((exist) => exist);
-  if (!fileExist) {
-    await RNFetchBlob.fs.createFile(DATE_FILENAME, JSON.stringify([]), 'utf8');
+  const path = dateToFilePath(date);
+  const isFileExist = await RNFetchBlob.fs.exists(path).then((exist) => exist);
+  if (!isFileExist) {
+    await RNFetchBlob.fs.createFile(path, JSON.stringify([]), 'utf8');
     return [];
   }
   return await RNFetchBlob.fs
-    .readFile(DATE_FILENAME, 'utf8')
+    .readFile(path, 'utf8')
     .then((data) => JSON.parse(data));
 };
 
@@ -28,10 +34,9 @@ export const createRecordByDate = async (date, record) => {
 };
 
 export const storeRecordByDate = (date, records) => {
-  const DATE_FILENAME =
-    _DIR + '/files/' + moment(date).format('YYYY-MM-DD') + '.json';
+  const path = dateToFilePath(date);
   const idData = _.map(records, (record, idx) => ({...record, id: idx + 1}));
-  RNFetchBlob.fs.writeFile(DATE_FILENAME, JSON.stringify(idData), 'utf8');
+  RNFetchBlob.fs.writeFile(path, JSON.stringify(idData), 'utf8');
 };
 
 export const getRecordByMonth = async (year, month) => {
@@ -52,4 +57,33 @@ export const getRecordByMonth = async (year, month) => {
   }
 
   return recordsMonth;
+};
+
+/* Setting Information Handler */
+const recordTypesFilePath = _DIR + '/files/setting/types.json';
+
+export const getRecordTypes = async () => {
+  await checkFolderExist(_DIR + '/files/setting');
+
+  const isFileExist = await RNFetchBlob.fs
+    .exists(recordTypesFilePath)
+    .then((exist) => exist);
+  if (!isFileExist) {
+    await RNFetchBlob.fs.createFile(
+      recordTypesFilePath,
+      JSON.stringify([]),
+      'utf8',
+    );
+    return [];
+  }
+
+  return await RNFetchBlob.fs
+    .readFile(recordTypesFilePath, 'utf8')
+    .then((data) => JSON.parse(data));
+};
+
+export const storeRecordTypes = async (types) => {
+  await checkFolderExist(_DIR + '/files/setting');
+  const idData = _.map(types, (type, idx) => ({...type, id: idx + 1}));
+  RNFetchBlob.fs.writeFile(recordTypesFilePath, JSON.stringify(idData), 'utf8');
 };
