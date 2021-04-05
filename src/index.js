@@ -17,33 +17,26 @@ import SettingScreen from './containers/SettingScreen';
 const store = createStore(recordsReducer, applyMiddleware(thunk));
 
 const Stack = createStackNavigator();
-const RecordStack = () => {
-  return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="RecordList" component={RecordListScreen} />
-      <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
-      <Stack.Screen name="RecordStatistic" component={RecordStatisticScreen} />
-    </Stack.Navigator>
-  );
-};
-const SettingStack = () => {
-  return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Setting" component={SettingScreen} />
-    </Stack.Navigator>
-  );
-};
-
 const Tab = createBottomTabNavigator();
+
+const TabStack = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="RecordList" component={RecordListScreen} />
+      <Tab.Screen name="RecordStatistic" component={RecordStatisticScreen} />
+      <Tab.Screen name="Setting" component={SettingScreen} />
+    </Tab.Navigator>
+  );
+};
 
 const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="RecordStack" component={RecordStack} />
-          <Tab.Screen name="SettingStack" component={SettingStack} />
-        </Tab.Navigator>
+        <Stack.Navigator headerMode="none">
+          <Stack.Screen name="TabStack" component={TabStack} />
+          <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
+        </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );

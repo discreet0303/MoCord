@@ -118,10 +118,6 @@ const RecordListScreen = ({navigation}) => {
           <View>
             <EmptyRecordButton navigation={navigation} date={date} />
           </View>
-          <Button
-            title="Stat"
-            onPress={() => navigation.navigate('RecordStatistic')}
-          />
         </View>
       </ScrollView>
     </>
