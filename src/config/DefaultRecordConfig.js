@@ -7,3 +7,13 @@ export const DEFAULT_RECORD_TYPE = [
   {name: 'income', label: '收入'},
   {name: 'others', label: '其他'},
 ];
+
+export const record_type = [
+  {label: '食物'},
+  {label: '飲品'},
+  {label: '交通'},
+  {label: '消費'},
+  {label: '居家'},
+  {label: '收入'},
+  {label: '其他'},
+];

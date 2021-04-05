@@ -1,25 +1,40 @@
 import _ from 'lodash';
 import React from 'react';
-import {View, Text} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 
 import {getRecordTypes, storeRecordTypes} from '../utils/fileManager';
 
-const def = [
-  {label: '食物'},
-  {label: '飲品'},
-  {label: '交通'},
-  {label: '消費'},
-  {label: '居家'},
-  {label: '收入'},
-  {label: '其他'},
-];
+const styles = StyleSheet.create({
+  typeRoot: {
+    flexDirection: 'row',
+    backgroundColor: '#FFF',
+    marginVertical: 5,
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 40,
+  },
+  typeDeleteText: {
+    backgroundColor: '#bbbbbb',
+    height: 40,
+    justifyContent: 'center',
+    padding: 5,
+  },
+});
 
 const SettingScreen = () => {
   const [types, setTypes] = React.useState(types);
+  const [text, onChangeText] = React.useState('');
 
   React.useEffect(() => {
     const runAsync = async () => {
-      await storeRecordTypes(def);
       const res = await getRecordTypes();
       console.log(res);
       setTypes(res);
@@ -28,10 +43,37 @@ const SettingScreen = () => {
     runAsync();
   }, []);
 
+  const addRecordType = async () => {
+    if (text === '') return;
+    const data = _.uniqBy([...types, {label: text}], 'label');
+    setTypes(data);
+    onChangeText('');
+    await storeRecordTypes(data);
+  };
+
+  const removeRecordType = async (typeIndex) => {
+    const data = _.filter(types, (type, typeIdx) => typeIdx !== typeIndex);
+    setTypes(data);
+    await storeRecordTypes(data);
+  };
+
   return (
     <View>
-      {_.map(types, (type) => (
-        <Text key={type.id}>{type.label}</Text>
+      <TextInput
+        style={{borderWidth: 1, borderColor: '#000'}}
+        value={text}
+        onChangeText={onChangeText}
+      />
+      <Button title={'Type'} onPress={addRecordType} />
+      {_.map(types, (type, typeIdx) => (
+        <View key={typeIdx} style={styles.typeRoot}>
+          <Text style={{fontSize: 18}}>{type.label}</Text>
+          <TouchableOpacity
+            style={styles.typeDeleteText}
+            onPress={() => removeRecordType(typeIdx)}>
+            <Text style={{fontSize: 18}}>De</Text>
+          </TouchableOpacity>
+        </View>
       ))}
     </View>
   );
