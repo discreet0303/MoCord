@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   Text,
-  Button,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -13,7 +12,6 @@ import moment from 'moment';
 
 import HeaderNav from '../componments/HeaderNav';
 
-import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
 import {getRecordByMonth} from '../utils/fileManager';
 
 const styles = StyleSheet.create({
@@ -50,10 +48,7 @@ const RecordStatisticScreen = ({navigation}) => {
         });
         data[type] = {
           amount: maxNum,
-          label:
-            DEFAULT_RECORD_TYPE[
-              _.findIndex(DEFAULT_RECORD_TYPE, ['name', type])
-            ].label,
+          label: type,
           records: typeData,
         };
       });
@@ -181,7 +176,6 @@ const RecordStatisticScreen = ({navigation}) => {
             );
           })}
         </View>
-        <Button title={'Back'} onPress={() => navigation.goBack()} />
       </ScrollView>
     </>
   );

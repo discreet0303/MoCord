@@ -4,10 +4,6 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import _ from 'lodash';
 import {useNavigation} from '@react-navigation/native';
 
-import {useDispatch} from 'react-redux';
-
-import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
-
 const styles = StyleSheet.create({
   root: {
     flexDirection: 'row',
@@ -41,9 +37,6 @@ const styles = StyleSheet.create({
 
 const RecordItem = ({record, handleRecordDelete}) => {
   const navigation = useNavigation();
-  const typeIndex = _.findIndex(DEFAULT_RECORD_TYPE, ['name', record.type]);
-  const recordType = DEFAULT_RECORD_TYPE[typeIndex];
-
   const handleRecordEdit = (record) => {
     navigation.push('RecordEdit', {record});
   };
@@ -52,7 +45,7 @@ const RecordItem = ({record, handleRecordDelete}) => {
     <View style={styles.root}>
       <View style={styles.leftBlock}>
         <Text style={{fontSize: 22, fontWeight: 'bold', paddingRight: 10}}>
-          {recordType.label}
+          {record.type}
         </Text>
         <Text style={{fontSize: 18, fontWeight: '600', color: '#636363'}}>
           /{record.note}

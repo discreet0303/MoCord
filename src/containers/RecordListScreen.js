@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Button,
   ScrollView,
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
@@ -14,10 +13,10 @@ import moment from 'moment';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchRecord, setRecord} from '../actions/recordsAction';
+import {fetchTypes} from '../actions/TypesAction';
 
 import HeaderNav from '../componments/HeaderNav';
 import RecordItem from '../componments/RecordItem';
-import TestM from '../componments/modal/TestM';
 
 const styles = StyleSheet.create({
   root: {
@@ -63,11 +62,13 @@ const RecordListScreen = ({navigation}) => {
   const records = useSelector((state) => state.records.records);
   const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));
 
+  // TODO: INIT STATE
   React.useEffect(() => {
-    const runAsync = async () => {
-      dispatch(fetchRecord(date));
-    };
-    runAsync();
+    dispatch(fetchTypes());
+  }, []);
+
+  React.useEffect(() => {
+    dispatch(fetchRecord(date));
   }, [date]);
 
   const handleRecordDelete = (record) => {

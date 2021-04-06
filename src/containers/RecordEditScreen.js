@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-
 import {
   View,
   Text,
@@ -12,17 +11,17 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+
+import {useDispatch, useSelector} from 'react-redux';
 import {addRecord, updateRecord} from '../actions/recordsAction';
 
-import {DEFAULT_RECORD_TYPE} from '../config/DefaultRecordConfig';
 import HeaderNav from '../componments/HeaderNav';
 import GoBack from '../componments/nav/GoBack';
 import Calculator from '../componments/Calculator';
 
 const RECORD_INIT = {
   datetime: moment().format('YYYY-MM-DD HH:mm'),
-  type: 'food',
+  type: '食物',
   money: 0,
   note: '',
 };
@@ -95,6 +94,7 @@ const RecordEditScreen = ({navigation, route}) => {
   const [recordData, setRecordData] = useState(_record);
   const [mathStack, setMathStack] = useState(_mathStack);
   const dispatch = useDispatch();
+  const recordTypes = useSelector((state) => state.types);
 
   React.useEffect(() => {
     setRecordData((data) => {
@@ -184,7 +184,7 @@ const RecordEditScreen = ({navigation, route}) => {
         keyboardVerticalOffset={-200}
         style={{flex: 1}}>
         {renderMoneySection()}
-        {_.map(_.chunk(DEFAULT_RECORD_TYPE, 4), (rowData, rowIdx) => {
+        {_.map(_.chunk(recordTypes, 4), (rowData, rowIdx) => {
           return (
             <View key={rowIdx} style={{flexDirection: 'row'}}>
               {_.map(rowData, (recordItem, recordItemIdx) => (
@@ -192,14 +192,14 @@ const RecordEditScreen = ({navigation, route}) => {
                   key={recordItemIdx}
                   style={[
                     styles.recordTypeItem,
-                    recordData.type == recordItem.name
+                    recordData.type == recordItem.label
                       ? styles.recordTypeItemActive
                       : styles.recordTypeItemInactive,
                   ]}
                   onPress={() =>
                     setRecordData((record) => ({
                       ...record,
-                      type: recordItem.name,
+                      type: recordItem.label,
                     }))
                   }>
                   <Text style={[styles.recordTypeText]}>
