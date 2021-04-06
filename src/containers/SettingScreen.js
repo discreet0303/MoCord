@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import {
   View,
@@ -9,6 +8,11 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import {useDispatch, useSelector} from 'react-redux';
+
+import _ from 'lodash';
+
+import {fetchTypes, addType, removeType} from '../actions/TypesAction';
 import {getRecordTypes, storeRecordTypes} from '../utils/fileManager';
 
 const styles = StyleSheet.create({
@@ -30,31 +34,21 @@ const styles = StyleSheet.create({
 });
 
 const SettingScreen = () => {
-  const [types, setTypes] = React.useState(types);
+  const dispatch = useDispatch();
+  const types = useSelector((state) => state.types);
   const [text, onChangeText] = React.useState('');
 
   React.useEffect(() => {
-    const runAsync = async () => {
-      const res = await getRecordTypes();
-      console.log(res);
-      setTypes(res);
-    };
-
-    runAsync();
+    dispatch(fetchTypes());
   }, []);
 
-  const addRecordType = async () => {
+  const addRecordType = () => {
     if (text === '') return;
-    const data = _.uniqBy([...types, {label: text}], 'label');
-    setTypes(data);
-    onChangeText('');
-    await storeRecordTypes(data);
+    dispatch(addType({label: text}));
   };
 
-  const removeRecordType = async (typeIndex) => {
-    const data = _.filter(types, (type, typeIdx) => typeIdx !== typeIndex);
-    setTypes(data);
-    await storeRecordTypes(data);
+  const removeRecordType = async (type) => {
+    dispatch(removeType(type));
   };
 
   return (
@@ -70,7 +64,7 @@ const SettingScreen = () => {
           <Text style={{fontSize: 18}}>{type.label}</Text>
           <TouchableOpacity
             style={styles.typeDeleteText}
-            onPress={() => removeRecordType(typeIdx)}>
+            onPress={() => removeRecordType(type)}>
             <Text style={{fontSize: 18}}>De</Text>
           </TouchableOpacity>
         </View>

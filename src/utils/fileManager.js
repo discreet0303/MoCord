@@ -2,7 +2,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import moment from 'moment';
 import _ from 'lodash';
 
-import {record_type} from '../config/DefaultRecordConfig';
+import {DEFAULT_RECORD_TYPE} from '../config';
 
 /* Global Variable */
 const _DIR = RNFetchBlob.fs.dirs.SDCardApplicationDir;
@@ -71,7 +71,10 @@ export const getRecordTypes = async () => {
     .exists(recordTypesFilePath)
     .then((exist) => exist);
   if (!isFileExist) {
-    const idData = _.map(record_type, (type, idx) => ({...type, id: idx + 1}));
+    const idData = _.map(DEFAULT_RECORD_TYPE, (type, idx) => ({
+      ...type,
+      id: idx + 1,
+    }));
     await RNFetchBlob.fs.createFile(
       recordTypesFilePath,
       JSON.stringify(idData),
@@ -83,6 +86,12 @@ export const getRecordTypes = async () => {
   return await RNFetchBlob.fs
     .readFile(recordTypesFilePath, 'utf8')
     .then((data) => JSON.parse(data));
+};
+
+export const createRecordType = async (type) => {
+  const typesData = await getRecordTypes();
+  typesData.push(type);
+  await storeRecordTypes(_.uniqBy(typesData, 'label'));
 };
 
 export const storeRecordTypes = async (types) => {
