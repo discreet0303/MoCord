@@ -1,10 +1,8 @@
-import {combineReducers} from 'redux';
-
 const INITIAL_STATE = {
   records: [],
 };
 
-const recordsReducer = (state = INITIAL_STATE, action) => {
+const RecordsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'ADD_RECORD':
       return {
@@ -18,6 +16,4 @@ const recordsReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default combineReducers({
-  records: recordsReducer,
-});
+export default RecordsReducer;

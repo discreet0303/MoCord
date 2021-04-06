@@ -7,14 +7,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import recordsReducer from './reducers/RecordsReducer';
+import RootReducer from './reducers';
 
 import RecordListScreen from './containers/RecordListScreen';
 import RecordEditScreen from './containers/RecordEditScreen';
 import RecordStatisticScreen from './containers/RecordStatisticScreen';
 import SettingScreen from './containers/SettingScreen';
 
-const store = createStore(recordsReducer, applyMiddleware(thunk));
+const store = createStore(RootReducer, applyMiddleware(thunk));
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
