@@ -1,5 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+
+import {useNavigation} from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   root: {
@@ -26,12 +28,28 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeaderNav = ({title = '', leftSection, rightSection}) => {
+const GoBack = () => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Text>Back</Text>
+    </TouchableOpacity>
+  );
+};
+
+const HeaderNav = ({
+  title = '',
+  renderLeftSection = null,
+  renderRightSection = null,
+  goBack = false,
+}) => {
   return (
     <View style={styles.root}>
-      <View style={styles.flex1}>{leftSection}</View>
+      <View style={styles.flex1}>
+        {goBack ? <GoBack /> : renderLeftSection}
+      </View>
       <Text style={styles.title}>{title}</Text>
-      <View style={styles.flex1}>{rightSection}</View>
+      <View style={styles.flex1}>{renderRightSection}</View>
     </View>
   );
 };
