@@ -16,7 +16,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addRecord, updateRecord} from '../actions/recordsAction';
 
 import HeaderNav from '../componments/HeaderNav';
-import GoBack from '../componments/nav/GoBack';
 import Calculator from '../componments/Calculator';
 
 const RECORD_INIT = {
@@ -178,7 +177,7 @@ const RecordEditScreen = ({navigation, route}) => {
 
   return (
     <>
-      <HeaderNav title={screenTitle} leftSection={<GoBack />} />
+      <HeaderNav title={screenTitle} goBack />
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={-200}
