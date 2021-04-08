@@ -2,7 +2,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import moment from 'moment';
 import _ from 'lodash';
 
-import {DEFAULT_RECORD_TYPE} from '../config';
+import {DEFAULT_RECORD_TYPE, DEFAULT_WALLET} from '../config';
 
 /* Global Variable */
 const _DIR = RNFetchBlob.fs.dirs.SDCardApplicationDir;
@@ -61,7 +61,7 @@ export const getRecordByMonth = async (year, month) => {
   return recordsMonth;
 };
 
-/* Setting Information Handler */
+/* Record Type Information Handler */
 const recordTypesFilePath = _DIR + '/files/setting/types.json';
 
 export const getRecordTypes = async () => {
@@ -98,4 +98,45 @@ export const storeRecordTypes = async (types) => {
   await checkFolderExist(_DIR + '/files/setting');
   const idData = _.map(types, (type, idx) => ({...type, id: idx + 1}));
   RNFetchBlob.fs.writeFile(recordTypesFilePath, JSON.stringify(idData), 'utf8');
+};
+
+/* Wallet Information Handler */
+const walletFilePath = _DIR + '/files/setting/wallet.json';
+
+export const getWallets = async () => {
+  await checkFolderExist(_DIR + '/files/setting');
+
+  const isFileExist = await RNFetchBlob.fs
+    .exists(walletFilePath)
+    .then((exist) => exist);
+  if (!isFileExist) {
+    const idData = _.map(DEFAULT_WALLET, (wallet, idx) => ({
+      ...wallet,
+      id: idx + 1,
+    }));
+    await RNFetchBlob.fs.createFile(
+      walletFilePath,
+      JSON.stringify(idData),
+      'utf8',
+    );
+    return idData;
+  }
+  return await RNFetchBlob.fs
+    .readFile(walletFilePath, 'utf8')
+    .then((data) => JSON.parse(data));
+};
+
+export const createWallet = async (type) => {
+  const walletsData = await getWallets();
+  walletsData.push(type);
+  await storeWallet(_.uniqBy(walletsData, 'label'));
+};
+
+export const storeWallet = async (wallets) => {
+  await checkFolderExist(_DIR + '/files/setting');
+  const idData = _.map(wallets, (wallet, idx) => ({
+    ...wallet,
+    id: idx + 1,
+  }));
+  RNFetchBlob.fs.writeFile(walletFilePath, JSON.stringify(idData), 'utf8');
 };

@@ -14,6 +14,7 @@ import RecordEditScreen from './containers/RecordEditScreen';
 import RecordStatisticScreen from './containers/RecordStatisticScreen';
 import SettingListScreen from './containers/setting/SettingListScreen';
 import TypeSettingScreen from './containers/setting/TypeSettingScreen';
+import WalletSettingScreen from './containers/setting/WalletSettingScreen';
 
 const store = createStore(RootReducer, applyMiddleware(thunk));
 
@@ -34,6 +35,7 @@ const SettingStack = () => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="TypeSetting" component={TypeSettingScreen} />
+      <Stack.Screen name="WalletSetting" component={WalletSettingScreen} />
     </Stack.Navigator>
   );
 };

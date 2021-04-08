@@ -48,7 +48,7 @@ const RecordItem = ({record, handleRecordDelete}) => {
           {record.type}
         </Text>
         <Text style={{fontSize: 18, fontWeight: '600', color: '#636363'}}>
-          /{record.note}
+          /{record.wallet ?? '無'} /{record.note}
         </Text>
       </View>
       <View style={styles.rightBlock}>

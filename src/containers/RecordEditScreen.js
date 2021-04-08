@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  ScrollView,
 } from 'react-native';
 
 import {useDispatch, useSelector} from 'react-redux';
@@ -22,22 +23,11 @@ const RECORD_INIT = {
   datetime: moment().format('YYYY-MM-DD HH:mm'),
   type: '食物',
   money: 0,
+  wallet: '錢包',
   note: '',
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
-  recordText: {
-    fontSize: 45,
-    textAlign: 'right',
-    marginVertical: 3,
-    marginRight: 5,
-  },
-  recordTypeRow: {
-    flexDirection: 'row',
-  },
   recordTypeItem: {
     width: '25%',
   },
@@ -55,27 +45,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   numberRoot: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  numberRow: {
-    flexDirection: 'row',
-    backgroundColor: '#282c34',
-  },
-  numberItem: {
-    flex: 1,
-  },
-  numberItemText: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    height: 45,
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#f7f7f7',
-  },
-  divide: {
-    height: 1,
-    backgroundColor: '#b3b3b3',
+    // flex: 1,
+    // justifyContent: 'flex-end',
   },
 });
 
@@ -94,6 +65,7 @@ const RecordEditScreen = ({navigation, route}) => {
   const [mathStack, setMathStack] = useState(_mathStack);
   const dispatch = useDispatch();
   const recordTypes = useSelector((state) => state.types);
+  const recordWallets = useSelector((state) => state.wallets);
 
   React.useEffect(() => {
     setRecordData((data) => {
@@ -175,14 +147,46 @@ const RecordEditScreen = ({navigation, route}) => {
     );
   };
 
+  const renderWalletSection = () => (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={{marginBottom: 3}}>
+      {_.map(recordWallets, (wallet) => (
+        <TouchableOpacity
+          key={wallet.id}
+          onPress={() =>
+            setRecordData((record) => ({
+              ...record,
+              wallet: wallet.label,
+            }))
+          }
+          style={[
+            {
+              height: 40,
+              width: 50,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: '#000',
+              marginHorizontal: 10,
+            },
+            recordData.wallet === wallet.label && {backgroundColor: '#999999'},
+          ]}>
+          <Text>{wallet.label}</Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+  );
+
   return (
     <>
       <HeaderNav title={screenTitle} goBack />
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={-200}
-        style={{flex: 1}}>
+        keyboardVerticalOffset={-200}>
         {renderMoneySection()}
+        {renderWalletSection()}
         {_.map(_.chunk(recordTypes, 4), (rowData, rowIdx) => {
           return (
             <View key={rowIdx} style={{flexDirection: 'row'}}>

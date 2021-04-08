@@ -5,7 +5,7 @@ import HeaderNav from '../../componments/HeaderNav';
 
 const SETTING_PAGE = [
   {screenName: 'TypeSetting', displayName: '設定類別'},
-  {screenName: 'TypeSetting', displayName: '設定錢包'},
+  {screenName: 'WalletSetting', displayName: '設定錢包'},
 ];
 
 const styles = StyleSheet.create({

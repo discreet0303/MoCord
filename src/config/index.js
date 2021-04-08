@@ -7,3 +7,9 @@ export const DEFAULT_RECORD_TYPE = [
   {label: '收入'},
   {label: '其他'},
 ];
+
+export const DEFAULT_WALLET = [
+  {label: '錢包'},
+  {label: '信用卡'},
+  {label: '悠遊卡'},
+];
