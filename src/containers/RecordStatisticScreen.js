@@ -10,9 +10,12 @@ import {
 import _ from 'lodash';
 import moment from 'moment';
 
+import {useSelector} from 'react-redux';
+
 import HeaderNav from '../componments/HeaderNav';
 
 import {getRecordByMonth} from '../utils/fileManager';
+import {calcuTotalMoney} from '../utils/record';
 
 const styles = StyleSheet.create({
   statisticRow: {
@@ -31,14 +34,18 @@ const styles = StyleSheet.create({
 const RecordStatisticScreen = ({navigation}) => {
   const year = moment().year();
   const [month, setMonth] = React.useState(moment().month() + 1);
-  const [monthReocrd, setMonthRecord] = React.useState({food: {}, eat: {}});
+  const [monthReocrd, setMonthRecord] = React.useState({});
   const [maxAmount, setMaxAmount] = React.useState(0);
+  const types = useSelector((state) => state.types);
 
   React.useEffect(() => {
     const runAsync = async () => {
       const res = await getRecordByMonth(year, month);
-
-      let data = {};
+      const total = calcuTotalMoney(res, types);
+      let data = {
+        total,
+        records: {},
+      };
       const groupByType = _.groupBy(res, 'type');
       _.each(groupByType, (typeData, type) => {
         const maxNum = _.sum(_.map(typeData, (d) => _.toInteger(d.money)));
@@ -46,12 +53,13 @@ const RecordStatisticScreen = ({navigation}) => {
           if (n < maxNum) return maxNum;
           return n;
         });
-        data[type] = {
+        data.records[type] = {
           amount: maxNum,
           label: type,
           records: typeData,
         };
       });
+      console.log(data);
       setMonthRecord(data);
     };
     runAsync();
@@ -83,7 +91,7 @@ const RecordStatisticScreen = ({navigation}) => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        {_.map(monthReocrd, (typeData, type) => {
+        {_.map(monthReocrd.records, (typeData, type) => {
           return (
             <View key={type} style={styles.statisticRow}>
               <Text style={styles.statisticText}>{typeData.label}</Text>
@@ -115,9 +123,7 @@ const RecordStatisticScreen = ({navigation}) => {
               justifyContent: 'center',
               paddingRight: 20,
             }}></View>
-          <Text style={styles.statisticText}>
-            {_.sum(_.map(monthReocrd, (m) => m.amount))}
-          </Text>
+          <Text style={styles.statisticText}>{monthReocrd.total}</Text>
         </View>
         <View
           style={{

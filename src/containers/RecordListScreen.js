@@ -18,6 +18,8 @@ import {fetchTypes} from '../actions/TypesAction';
 import HeaderNav from '../componments/HeaderNav';
 import RecordItem from '../componments/RecordItem';
 
+import {calcuTotalMoney} from '../utils/record';
+
 const styles = StyleSheet.create({
   root: {
     flex: 1,
@@ -60,6 +62,7 @@ const EmptyRecordButton = ({navigation, date}) => {
 const RecordListScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const records = useSelector((state) => state.records.records);
+  const types = useSelector((state) => state.types);
   const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));
 
   // TODO: INIT STATE
@@ -99,9 +102,7 @@ const RecordListScreen = ({navigation}) => {
       />
       <View style={styles.totalSection}>
         <Text style={styles.totalText}>總和</Text>
-        <Text style={styles.totalText}>
-          {_.sum(_.map(records, (record) => _.toInteger(record.money)))}
-        </Text>
+        <Text style={styles.totalText}>{calcuTotalMoney(records, types)}</Text>
       </View>
       <ScrollView>
         <View style={styles.root}>

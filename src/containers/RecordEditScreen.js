@@ -154,7 +154,7 @@ const RecordEditScreen = ({navigation, route}) => {
       style={{marginBottom: 3}}>
       {_.map(recordWallets, (wallet) => (
         <TouchableOpacity
-          key={wallet.id}
+          key={wallet.label}
           onPress={() =>
             setRecordData((record) => ({
               ...record,
