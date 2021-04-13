@@ -91,7 +91,7 @@ export const getRecordTypes = async () => {
 export const createRecordType = async (type) => {
   const typesData = await getRecordTypes();
   typesData.push(type);
-  await storeRecordTypes(_.uniqBy(typesData, 'label'));
+  await storeRecordTypes(_.uniqBy(typesData, (u) => u.label + u.operator));
 };
 
 export const storeRecordTypes = async (types) => {
