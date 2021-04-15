@@ -25,6 +25,7 @@ const RECORD_INIT = {
   money: 0,
   wallet: '錢包',
   note: '',
+  equation: '',
 };
 
 const styles = StyleSheet.create({
@@ -51,21 +52,23 @@ const styles = StyleSheet.create({
 });
 
 const RecordEditScreen = ({navigation, route}) => {
-  const _mode = _.has(route.params, 'record') ? true : false;
-  const screenTitle = _.has(route.params, 'record') ? '編輯紀錄' : '新增紀錄';
+  const dispatch = useDispatch();
+  const recordTypes = useSelector((state) => state.types);
+  const recordWallets = useSelector((state) => state.wallets);
 
-  const _record = _mode ? route.params.record : RECORD_INIT;
-  const _mathStack = _mode ? _.split(route.params.record.money) : [];
+  const editMode = _.has(route.params, 'record') ? true : false;
+  const screenTitle = editMode ? '編輯紀錄' : '新增紀錄';
 
+  const _record = editMode
+    ? {...RECORD_INIT, ...route.params.record}
+    : RECORD_INIT;
+  const _mathStack = editMode ? _.split(_record.equation, '') : [];
   _record.datetime = _.has(route.params, 'date')
     ? moment(route.params.date).format('YYYY-MM-DD HH:mm')
     : _record.datetime;
 
   const [recordData, setRecordData] = useState(_record);
   const [mathStack, setMathStack] = useState(_mathStack);
-  const dispatch = useDispatch();
-  const recordTypes = useSelector((state) => state.types);
-  const recordWallets = useSelector((state) => state.wallets);
 
   React.useEffect(() => {
     setRecordData((data) => {
@@ -79,8 +82,8 @@ const RecordEditScreen = ({navigation, route}) => {
 
   const recordHandler = () => {
     if (recordData.money === 0) return;
-    if (_mode) {
-      dispatch(updateRecord(recordData));
+    if (editMode) {
+      dispatch(updateRecord({...recordData, equation: mathStack.join('')}));
       Alert.alert(
         '更新成功',
         '',
@@ -97,7 +100,7 @@ const RecordEditScreen = ({navigation, route}) => {
         },
       );
     } else {
-      dispatch(addRecord(recordData));
+      dispatch(addRecord({...recordData, equation: mathStack.join('')}));
       setRecordData(RECORD_INIT);
       setMathStack([]);
       Alert.alert('新增成功');

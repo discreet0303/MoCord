@@ -28,7 +28,7 @@ export const updateRecord = (record) => async (dispatch) => {
   const recordsData = await getRecordsByDate(date);
   const idx = _.findIndex(recordsData, ['id', record.id]);
   recordsData[idx] = record;
-  storeRecordByDate(date, recordsData);
+  await storeRecordByDate(date, recordsData);
   dispatch({
     type: 'SET_RECORD',
     payload: recordsData,
