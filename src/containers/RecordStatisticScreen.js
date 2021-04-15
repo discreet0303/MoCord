@@ -139,7 +139,7 @@ const RecordStatisticScreen = ({navigation}) => {
             marginBottom: 20,
           }}>
           <Text style={{textAlign: 'center', fontSize: 30}}>All Record</Text>
-          {_.map(monthReocrd, (typeData, type) => {
+          {_.map(monthReocrd.records, (typeData, type) => {
             return (
               <View
                 key={type}
