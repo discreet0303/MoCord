@@ -24,8 +24,8 @@ const Tab = createBottomTabNavigator();
 const TabStack = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="RecordList" component={RecordListScreen} />
       <Tab.Screen name="RecordStatistic" component={RecordStatisticScreen} />
+      <Tab.Screen name="RecordList" component={RecordListScreen} />
       <Tab.Screen name="SettingList" component={SettingListScreen} />
     </Tab.Navigator>
   );
