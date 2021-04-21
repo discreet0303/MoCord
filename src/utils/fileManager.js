@@ -1,15 +1,18 @@
+import { Platform } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 import moment from 'moment';
 import _ from 'lodash';
 
-import {DEFAULT_RECORD_TYPE, DEFAULT_WALLET} from '../config';
+import { DEFAULT_RECORD_TYPE, DEFAULT_WALLET } from '../config';
 
 /* Global Variable */
-const _DIR = RNFetchBlob.fs.dirs.SDCardApplicationDir;
+const _DIR =
+  Platform.OS === 'ios'
+    ? RNFetchBlob.fs.dirs.DocumentDir
+    : RNFetchBlob.fs.dirs.SDCardApplicationDir;
+
 const checkFolderExist = async (folderPath) => {
-  const isFolderExist = await RNFetchBlob.fs
-    .exists(folderPath)
-    .then((exist) => exist);
+  const isFolderExist = await RNFetchBlob.fs.exists(folderPath).then((exist) => exist);
   if (!isFolderExist) RNFetchBlob.fs.mkdir(folderPath);
 };
 
@@ -24,9 +27,7 @@ export const getRecordsByDate = async (date) => {
     await RNFetchBlob.fs.createFile(path, JSON.stringify([]), 'utf8');
     return [];
   }
-  return await RNFetchBlob.fs
-    .readFile(path, 'utf8')
-    .then((data) => JSON.parse(data));
+  return await RNFetchBlob.fs.readFile(path, 'utf8').then((data) => JSON.parse(data));
 };
 
 export const createRecordByDate = async (date, record) => {
@@ -37,14 +38,14 @@ export const createRecordByDate = async (date, record) => {
 
 export const storeRecordByDate = (date, records) => {
   const path = dateToFilePath(date);
-  const idData = _.map(records, (record, idx) => ({...record, id: idx + 1}));
+  const idData = _.map(records, (record, idx) => ({ ...record, id: idx + 1 }));
   RNFetchBlob.fs.writeFile(path, JSON.stringify(idData), 'utf8');
 };
 
 export const getRecordByMonth = async (year, month) => {
   month -= 1;
-  const startMonthDate = moment().set({year, month}).startOf('month');
-  const endMonthDate = moment().set({year, month}).endOf('month');
+  const startMonthDate = moment().set({ year, month }).startOf('month');
+  const endMonthDate = moment().set({ year, month }).endOf('month');
 
   let days = [];
   while (startMonthDate <= endMonthDate) {
@@ -67,19 +68,13 @@ const recordTypesFilePath = _DIR + '/files/setting/types.json';
 export const getRecordTypes = async () => {
   await checkFolderExist(_DIR + '/files/setting');
 
-  const isFileExist = await RNFetchBlob.fs
-    .exists(recordTypesFilePath)
-    .then((exist) => exist);
+  const isFileExist = await RNFetchBlob.fs.exists(recordTypesFilePath).then((exist) => exist);
   if (!isFileExist) {
     const idData = _.map(DEFAULT_RECORD_TYPE, (type, idx) => ({
       ...type,
       id: idx + 1,
     }));
-    await RNFetchBlob.fs.createFile(
-      recordTypesFilePath,
-      JSON.stringify(idData),
-      'utf8',
-    );
+    await RNFetchBlob.fs.createFile(recordTypesFilePath, JSON.stringify(idData), 'utf8');
     return idData;
   }
 
@@ -96,7 +91,7 @@ export const createRecordType = async (type) => {
 
 export const storeRecordTypes = async (types) => {
   await checkFolderExist(_DIR + '/files/setting');
-  const idData = _.map(types, (type, idx) => ({...type, id: idx + 1}));
+  const idData = _.map(types, (type, idx) => ({ ...type, id: idx + 1 }));
   RNFetchBlob.fs.writeFile(recordTypesFilePath, JSON.stringify(idData), 'utf8');
 };
 
@@ -106,24 +101,16 @@ const walletFilePath = _DIR + '/files/setting/wallet.json';
 export const getWallets = async () => {
   await checkFolderExist(_DIR + '/files/setting');
 
-  const isFileExist = await RNFetchBlob.fs
-    .exists(walletFilePath)
-    .then((exist) => exist);
+  const isFileExist = await RNFetchBlob.fs.exists(walletFilePath).then((exist) => exist);
   if (!isFileExist) {
     const idData = _.map(DEFAULT_WALLET, (wallet, idx) => ({
       ...wallet,
       id: idx + 1,
     }));
-    await RNFetchBlob.fs.createFile(
-      walletFilePath,
-      JSON.stringify(idData),
-      'utf8',
-    );
+    await RNFetchBlob.fs.createFile(walletFilePath, JSON.stringify(idData), 'utf8');
     return idData;
   }
-  return await RNFetchBlob.fs
-    .readFile(walletFilePath, 'utf8')
-    .then((data) => JSON.parse(data));
+  return await RNFetchBlob.fs.readFile(walletFilePath, 'utf8').then((data) => JSON.parse(data));
 };
 
 export const createWallet = async (type) => {
