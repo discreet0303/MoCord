@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import {OPERATOR_TYPE} from '../config';
+import { OPERATOR_TYPE } from '../config';
 
 export const calcuTotalMoney = (records, types) => {
   let amount = _.map(records, (record) => {

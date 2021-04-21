@@ -1,9 +1,5 @@
-import {Platform} from 'react-native';
-import {
-  PERMISSIONS,
-  checkMultiple,
-  requestMultiple,
-} from 'react-native-permissions';
+import { Platform } from 'react-native';
+import { PERMISSIONS, checkMultiple, requestMultiple } from 'react-native-permissions';
 
 import _ from 'lodash';
 
@@ -34,8 +30,7 @@ export const requestPermission = async () => {
   return result;
 };
 
-const checkResult = (result) =>
-  _.every(_.map(result), (res) => res === 'granted');
+const checkResult = (result) => _.every(_.map(result), (res) => res === 'granted');
 
 export const handlePermission = async () => {
   const res = await checkPermission();

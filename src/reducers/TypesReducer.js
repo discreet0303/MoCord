@@ -1,4 +1,4 @@
-import {DEFAULT_RECORD_TYPE} from '../config';
+import { DEFAULT_RECORD_TYPE } from '../config';
 const INITIAL_TYPES_STATE = DEFAULT_RECORD_TYPE;
 
 const TypesReducer = (state = INITIAL_TYPES_STATE, action) => {

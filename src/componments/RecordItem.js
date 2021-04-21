@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import _ from 'lodash';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   root: {
@@ -11,6 +11,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 5,
     minHeight: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   recordInfoBlock: {
     flex: 1,
@@ -23,10 +25,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const RecordItem = ({record, handleRecordDelete}) => {
+const RecordItem = ({ record, handleRecordDelete }) => {
   const navigation = useNavigation();
   const handleRecordEdit = (record) => {
-    navigation.push('RecordEdit', {record});
+    navigation.push('RecordEdit', { record });
   };
 
   return (
@@ -38,7 +40,8 @@ const RecordItem = ({record, handleRecordDelete}) => {
           paddingRight: 10,
           textAlignVertical: 'center',
           paddingHorizontal: 10,
-        }}>
+        }}
+      >
         {record.type}
       </Text>
       <Text
@@ -49,33 +52,37 @@ const RecordItem = ({record, handleRecordDelete}) => {
           color: '#636363',
           textAlignVertical: 'bottom',
           marginVertical: 5,
-        }}>
+        }}
+      >
         /{record.wallet ?? '無'} /{record.note}
       </Text>
-      <Text
-        style={{fontSize: 22, textAlignVertical: 'center', paddingLeft: 10}}>
+      <Text style={{ fontSize: 22, textAlignVertical: 'center', paddingLeft: 10 }}>
         ${record.money}
       </Text>
       <TouchableOpacity
         style={{
           backgroundColor: '#DDDDDD',
           width: 50,
+          marginLeft: 5,
+          height: '100%',
           justifyContent: 'center',
           alignItems: 'center',
-          marginLeft: 5,
         }}
-        onPress={() => handleRecordEdit(record)}>
+        onPress={() => handleRecordEdit(record)}
+      >
         <Text>ED</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={{
           backgroundColor: '#999999',
           width: 50,
+          marginLeft: 5,
+          height: '100%',
           justifyContent: 'center',
           alignItems: 'center',
-          marginLeft: 5,
         }}
-        onPress={() => handleRecordDelete(record)}>
+        onPress={() => handleRecordDelete(record)}
+      >
         <Text>DE</Text>
       </TouchableOpacity>
     </View>

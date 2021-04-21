@@ -24,9 +24,7 @@ export default mathCalculate = (mathStack) => {
   for (let i = 0, n = operation.operateOrder.length; i < n; i++) {
     // Regular Expression to look for operators between floating numbers or integers
     let re = new RegExp(
-      '(\\d+\\.?\\d*)([\\' +
-        operation.operateOrder[i].join('\\') +
-        '])(\\d+\\.?\\d*)',
+      '(\\d+\\.?\\d*)([\\' + operation.operateOrder[i].join('\\') + '])(\\d+\\.?\\d*)',
     );
     re.lastIndex = 0;
     while (re.test(mathString)) {

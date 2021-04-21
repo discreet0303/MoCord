@@ -53,7 +53,6 @@ const RecordStatisticScreen = ({ navigation }) => {
           records: typeData,
         };
       });
-      console.log(data);
       setMonthRecord(data);
     };
     runAsync();
@@ -146,8 +145,6 @@ const RecordStatisticScreen = ({ navigation }) => {
                     fontWeight: '700',
                     marginBottom: 5,
                     paddingLeft: 10,
-                    borderLeftColor: '#666666',
-                    borderLeftWidth: 4,
                   }}
                 >
                   {typeData.label}

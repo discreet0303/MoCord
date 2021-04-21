@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   root: {
@@ -45,9 +45,7 @@ const HeaderNav = ({
 }) => {
   return (
     <View style={styles.root}>
-      <View style={styles.flex1}>
-        {goBack ? <GoBack /> : renderLeftSection}
-      </View>
+      <View style={styles.flex1}>{goBack ? <GoBack /> : renderLeftSection}</View>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.flex1}>{renderRightSection}</View>
     </View>

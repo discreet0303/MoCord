@@ -1,4 +1,4 @@
-import {DEFAULT_WALLET} from '../config';
+import { DEFAULT_WALLET } from '../config';
 const INITIAL_TYPES_STATE = DEFAULT_WALLET;
 
 const WalletsReducer = (state = INITIAL_TYPES_STATE, action) => {
