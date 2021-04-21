@@ -1,21 +1,15 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 
 import _ from 'lodash';
 import moment from 'moment';
 
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import HeaderNav from '../componments/HeaderNav';
 
-import {getRecordByMonth} from '../utils/fileManager';
-import {calcuTotalMoney} from '../utils/record';
+import { getRecordByMonth } from '../utils/fileManager';
+import { calcuTotalMoney } from '../utils/record';
 
 const styles = StyleSheet.create({
   statisticRow: {
@@ -31,7 +25,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RecordStatisticScreen = ({navigation}) => {
+const RecordStatisticScreen = ({ navigation }) => {
   const year = moment().year();
   const [month, setMonth] = React.useState(moment().month() + 1);
   const [monthReocrd, setMonthRecord] = React.useState({});
@@ -66,13 +60,14 @@ const RecordStatisticScreen = ({navigation}) => {
   }, [month]);
 
   return (
-    <>
+    <SafeAreaView>
       <HeaderNav title={`${month} 月統計`} />
       <ScrollView>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={{paddingVertical: 5}}>
+          style={{ paddingVertical: 5 }}
+        >
           {_.map(_.times(12), (monthNum) => (
             <TouchableOpacity
               key={monthNum}
@@ -86,8 +81,9 @@ const RecordStatisticScreen = ({navigation}) => {
                 borderColor: '#000',
                 backgroundColor: monthNum + 1 === month ? 'gray' : 'white',
               }}
-              onPress={() => setMonth(monthNum + 1)}>
-              <Text style={{textAlign: 'center'}}>{monthNum + 1}</Text>
+              onPress={() => setMonth(monthNum + 1)}
+            >
+              <Text style={{ textAlign: 'center' }}>{monthNum + 1}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -100,21 +96,21 @@ const RecordStatisticScreen = ({navigation}) => {
                   flex: 1,
                   justifyContent: 'center',
                   paddingRight: 20,
-                }}>
+                }}
+              >
                 <View
                   style={{
                     height: 1,
                     backgroundColor: 'gray',
-                    width: `${_.toInteger(
-                      (typeData.amount / maxAmount) * 100,
-                    )}%`,
-                  }}></View>
+                    width: `${_.toInteger((typeData.amount / maxAmount) * 100)}%`,
+                  }}
+                ></View>
               </View>
               <Text style={styles.statisticText}>{typeData.amount}</Text>
             </View>
           );
         })}
-        <View style={{height: 1, backgroundColor: '#b7b7b7'}}></View>
+        <View style={{ height: 1, backgroundColor: '#b7b7b7' }}></View>
         <View style={styles.statisticRow}>
           <Text style={styles.statisticText}>合計</Text>
           <View
@@ -122,7 +118,8 @@ const RecordStatisticScreen = ({navigation}) => {
               flex: 1,
               justifyContent: 'center',
               paddingRight: 20,
-            }}></View>
+            }}
+          ></View>
           <Text style={styles.statisticText}>{monthReocrd.total}</Text>
         </View>
         <View
@@ -137,13 +134,12 @@ const RecordStatisticScreen = ({navigation}) => {
             shadowRadius: 1.41,
             elevation: 2,
             marginBottom: 20,
-          }}>
-          <Text style={{textAlign: 'center', fontSize: 30}}>All Record</Text>
+          }}
+        >
+          <Text style={{ textAlign: 'center', fontSize: 30 }}>All Record</Text>
           {_.map(monthReocrd.records, (typeData, type) => {
             return (
-              <View
-                key={type}
-                style={{paddingHorizontal: 20, paddingVertical: 10}}>
+              <View key={type} style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
                 <Text
                   style={{
                     fontSize: 18,
@@ -152,16 +148,17 @@ const RecordStatisticScreen = ({navigation}) => {
                     paddingLeft: 10,
                     borderLeftColor: '#666666',
                     borderLeftWidth: 4,
-                  }}>
+                  }}
+                >
                   {typeData.label}
                 </Text>
                 {_.map(typeData.records, (record, idx) => (
-                  <View key={idx} style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 18, paddingRight: 15}}>
+                  <View key={idx} style={{ flexDirection: 'row' }}>
+                    <Text style={{ fontSize: 18, paddingRight: 15 }}>
                       {moment(record.datetime).format('DD')}
                     </Text>
-                    <Text style={{flex: 1, fontSize: 18}}>{record.note}</Text>
-                    <Text style={{fontSize: 18}}>${record.money}</Text>
+                    <Text style={{ flex: 1, fontSize: 18 }}>{record.note}</Text>
+                    <Text style={{ fontSize: 18 }}>${record.money}</Text>
                   </View>
                 ))}
                 <View
@@ -170,12 +167,11 @@ const RecordStatisticScreen = ({navigation}) => {
                     marginTop: 5,
                     borderTopColor: '#b7b7b7',
                     borderTopWidth: 1,
-                  }}>
-                  <Text style={{flex: 1, fontSize: 18}}>合計</Text>
-                  <Text style={{fontSize: 18}}>
-                    {_.sum(
-                      _.map(typeData.records, (r) => _.toInteger(r.money)),
-                    )}
+                  }}
+                >
+                  <Text style={{ flex: 1, fontSize: 18 }}>合計</Text>
+                  <Text style={{ fontSize: 18 }}>
+                    {_.sum(_.map(typeData.records, (r) => _.toInteger(r.money)))}
                   </Text>
                 </View>
               </View>
@@ -183,7 +179,7 @@ const RecordStatisticScreen = ({navigation}) => {
           })}
         </View>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 

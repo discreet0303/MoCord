@@ -1,11 +1,11 @@
 import React from 'react';
-import {ScrollView, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import { ScrollView, TouchableOpacity, Text, StyleSheet, SafeAreaView } from 'react-native';
 
 import HeaderNav from '../../componments/HeaderNav';
 
 const SETTING_PAGE = [
-  {screenName: 'TypeSetting', displayName: '設定類別'},
-  {screenName: 'WalletSetting', displayName: '設定錢包'},
+  { screenName: 'TypeSetting', displayName: '設定類別' },
+  { screenName: 'WalletSetting', displayName: '設定錢包' },
 ];
 
 const styles = StyleSheet.create({
@@ -30,19 +30,20 @@ const styles = StyleSheet.create({
   },
 });
 
-const SettingItem = ({navigation, name, screenName}) => {
+const SettingItem = ({ navigation, name, screenName }) => {
   return (
     <TouchableOpacity
       style={styles.settingItem}
-      onPress={() => navigation.push('SettingStack', {screen: screenName})}>
+      onPress={() => navigation.push('SettingStack', { screen: screenName })}
+    >
       <Text style={styles.settingItemText}>{name}</Text>
     </TouchableOpacity>
   );
 };
 
-const SettingListScreen = ({navigation}) => {
+const SettingListScreen = ({ navigation }) => {
   return (
-    <>
+    <SafeAreaView>
       <HeaderNav title="設定頁面" />
       <ScrollView>
         {SETTING_PAGE.map((page, idx) => (
@@ -54,7 +55,7 @@ const SettingListScreen = ({navigation}) => {
           />
         ))}
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 

@@ -7,15 +7,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import _ from 'lodash';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchTypes, addType, removeType} from '../../actions/TypesAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTypes, addType, removeType } from '../../actions/TypesAction';
 
 import HeaderNav from '../../componments/HeaderNav';
 
-import {OPERATOR_TYPE} from '../../config';
+import { OPERATOR_TYPE } from '../../config';
 
 const styles = StyleSheet.create({
   typeRoot: {
@@ -51,7 +52,7 @@ const TypeSettingScreen = () => {
 
   const addRecordType = (op) => {
     if (text === '') return;
-    dispatch(addType({label: text, operator: op}));
+    dispatch(addType({ label: text, operator: op }));
   };
 
   const removeRecordType = async (type) => {
@@ -59,7 +60,7 @@ const TypeSettingScreen = () => {
   };
 
   return (
-    <>
+    <SafeAreaView>
       <HeaderNav title="設定類別" goBack />
       <ScrollView>
         {_.map(_.keys(types), (op, idx) => (
@@ -67,31 +68,26 @@ const TypeSettingScreen = () => {
             <Text style={styles.typeSectionText}>{op}</Text>
             {_.map(types[op], (type, typeIdx) => (
               <View key={typeIdx} style={styles.typeRoot}>
-                <Text style={{fontSize: 18}}>{type.label}</Text>
+                <Text style={{ fontSize: 18 }}>{type.label}</Text>
                 <TouchableOpacity
                   style={styles.typeDeleteText}
-                  onPress={() => removeRecordType(type)}>
-                  <Text style={{fontSize: 18}}>De</Text>
+                  onPress={() => removeRecordType(type)}
+                >
+                  <Text style={{ fontSize: 18 }}>De</Text>
                 </TouchableOpacity>
               </View>
             ))}
           </View>
         ))}
         <TextInput
-          style={{borderWidth: 1, borderColor: '#000'}}
+          style={{ borderWidth: 1, borderColor: '#000' }}
           value={text}
           onChangeText={onChangeText}
         />
-        <Button
-          title={'Add Pos Type'}
-          onPress={() => addRecordType(OPERATOR_TYPE.position)}
-        />
-        <Button
-          title={'Add Neg Type'}
-          onPress={() => addRecordType(OPERATOR_TYPE.negative)}
-        />
+        <Button title={'Add Pos Type'} onPress={() => addRecordType(OPERATOR_TYPE.position)} />
+        <Button title={'Add Neg Type'} onPress={() => addRecordType(OPERATOR_TYPE.negative)} />
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 

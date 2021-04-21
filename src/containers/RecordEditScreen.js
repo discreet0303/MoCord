@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 import {
@@ -11,10 +11,11 @@ import {
   Platform,
   Alert,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {addRecord, updateRecord} from '../actions/recordsAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { addRecord, updateRecord } from '../actions/recordsAction';
 
 import HeaderNav from '../componments/HeaderNav';
 import Calculator from '../componments/Calculator';
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RecordEditScreen = ({navigation, route}) => {
+const RecordEditScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const recordTypes = useSelector((state) => state.types);
   const recordWallets = useSelector((state) => state.wallets);
@@ -59,9 +60,7 @@ const RecordEditScreen = ({navigation, route}) => {
   const editMode = _.has(route.params, 'record') ? true : false;
   const screenTitle = editMode ? '編輯紀錄' : '新增紀錄';
 
-  const _record = editMode
-    ? {...RECORD_INIT, ...route.params.record}
-    : RECORD_INIT;
+  const _record = editMode ? { ...RECORD_INIT, ...route.params.record } : RECORD_INIT;
   const _mathStack = editMode ? _.split(_record.equation, '') : [];
   _record.datetime = _.has(route.params, 'date')
     ? moment(route.params.date).format('YYYY-MM-DD HH:mm')
@@ -83,7 +82,7 @@ const RecordEditScreen = ({navigation, route}) => {
   const recordHandler = () => {
     if (recordData.money === 0) return;
     if (editMode) {
-      dispatch(updateRecord({...recordData, equation: mathStack.join('')}));
+      dispatch(updateRecord({ ...recordData, equation: mathStack.join('') }));
       Alert.alert(
         '更新成功',
         '',
@@ -100,7 +99,7 @@ const RecordEditScreen = ({navigation, route}) => {
         },
       );
     } else {
-      dispatch(addRecord({...recordData, equation: mathStack.join('')}));
+      dispatch(addRecord({ ...recordData, equation: mathStack.join('') }));
       setRecordData(RECORD_INIT);
       setMathStack([]);
       Alert.alert('新增成功');
@@ -115,7 +114,8 @@ const RecordEditScreen = ({navigation, route}) => {
           height: 80,
           justifyContent: 'center',
           marginRight: 10,
-        }}>
+        }}
+      >
         {isExistOperater.length > 0 ? (
           <>
             <Text
@@ -123,7 +123,8 @@ const RecordEditScreen = ({navigation, route}) => {
                 fontSize: 25,
                 textAlign: 'right',
                 color: '#ceaf57',
-              }}>
+              }}
+            >
               {_.join(mathStack, '')}
             </Text>
             <Text
@@ -132,7 +133,8 @@ const RecordEditScreen = ({navigation, route}) => {
                 textAlign: 'right',
                 marginTop: -10,
                 color: '#525252',
-              }}>
+              }}
+            >
               ${recordData.money}
             </Text>
           </>
@@ -142,7 +144,8 @@ const RecordEditScreen = ({navigation, route}) => {
               fontSize: 45,
               textAlign: 'right',
               color: '#525252',
-            }}>
+            }}
+          >
             ${recordData.money}
           </Text>
         )}
@@ -151,10 +154,7 @@ const RecordEditScreen = ({navigation, route}) => {
   };
 
   const renderWalletSection = () => (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      style={{marginBottom: 3}}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 3 }}>
       {_.map(recordWallets, (wallet) => (
         <TouchableOpacity
           key={wallet.label}
@@ -174,8 +174,9 @@ const RecordEditScreen = ({navigation, route}) => {
               borderColor: '#000',
               marginHorizontal: 10,
             },
-            recordData.wallet === wallet.label && {backgroundColor: '#999999'},
-          ]}>
+            recordData.wallet === wallet.label && { backgroundColor: '#999999' },
+          ]}
+        >
           <Text>{wallet.label}</Text>
         </TouchableOpacity>
       ))}
@@ -183,16 +184,17 @@ const RecordEditScreen = ({navigation, route}) => {
   );
 
   return (
-    <>
+    <SafeAreaView>
       <HeaderNav title={screenTitle} goBack />
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={-200}>
+        keyboardVerticalOffset={-200}
+      >
         {renderMoneySection()}
         {renderWalletSection()}
         {_.map(_.chunk(recordTypes, 4), (rowData, rowIdx) => {
           return (
-            <View key={rowIdx} style={{flexDirection: 'row'}}>
+            <View key={rowIdx} style={{ flexDirection: 'row' }}>
               {_.map(rowData, (recordItem, recordItemIdx) => (
                 <TouchableOpacity
                   key={recordItemIdx}
@@ -207,17 +209,16 @@ const RecordEditScreen = ({navigation, route}) => {
                       ...record,
                       type: recordItem.label,
                     }))
-                  }>
-                  <Text style={[styles.recordTypeText]}>
-                    {recordItem.label}
-                  </Text>
+                  }
+                >
+                  <Text style={[styles.recordTypeText]}>{recordItem.label}</Text>
                 </TouchableOpacity>
               ))}
             </View>
           );
         })}
         <TextInput
-          style={{borderColor: 'gray', borderWidth: 1, fontSize: 20}}
+          style={{ borderColor: 'gray', borderWidth: 1, fontSize: 20 }}
           onChangeText={(note) =>
             setRecordData((record) => ({
               ...record,
@@ -234,7 +235,7 @@ const RecordEditScreen = ({navigation, route}) => {
           />
         </View>
       </KeyboardAvoidingView>
-    </>
+    </SafeAreaView>
   );
 };
 

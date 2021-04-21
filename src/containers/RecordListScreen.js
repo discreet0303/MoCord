@@ -1,24 +1,18 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import {Calendar} from 'react-native-calendars';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 
 import _ from 'lodash';
 import moment from 'moment';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchRecord, setRecord} from '../actions/recordsAction';
-import {fetchTypes} from '../actions/TypesAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRecord, setRecord } from '../actions/recordsAction';
+import { fetchTypes } from '../actions/TypesAction';
 
 import HeaderNav from '../componments/HeaderNav';
 import RecordItem from '../componments/RecordItem';
 
-import {calcuTotalMoney} from '../utils/record';
+import { calcuTotalMoney } from '../utils/record';
 
 const styles = StyleSheet.create({
   root: {
@@ -49,17 +43,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const EmptyRecordButton = ({navigation, date}) => {
+const EmptyRecordButton = ({ navigation, date }) => {
   return (
     <TouchableOpacity
       style={styles.emptyRecordButton}
-      onPress={() => navigation.navigate('RecordEdit', {date: date})}>
-      <Text style={{fontSize: 18}}>新增</Text>
+      onPress={() => navigation.navigate('RecordEdit', { date: date })}
+    >
+      <Text style={{ fontSize: 18 }}>新增</Text>
     </TouchableOpacity>
   );
 };
 
-const RecordListScreen = ({navigation}) => {
+const RecordListScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const records = useSelector((state) => state.records.records);
   const types = useSelector((state) => state.types);
@@ -80,7 +75,7 @@ const RecordListScreen = ({navigation}) => {
   };
 
   return (
-    <>
+    <SafeAreaView>
       <HeaderNav title={moment(date).format('YYYY/MM/DD')} />
       <Calendar
         current={date}
@@ -106,14 +101,10 @@ const RecordListScreen = ({navigation}) => {
       </View>
       <ScrollView>
         <View style={styles.root}>
-          <View style={{width: '100%'}}>
+          <View style={{ width: '100%' }}>
             {_.map(records, (record, idx) => {
               return (
-                <RecordItem
-                  key={idx}
-                  record={record}
-                  handleRecordDelete={handleRecordDelete}
-                />
+                <RecordItem key={idx} record={record} handleRecordDelete={handleRecordDelete} />
               );
             })}
           </View>
@@ -122,7 +113,7 @@ const RecordListScreen = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 

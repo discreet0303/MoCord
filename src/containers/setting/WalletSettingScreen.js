@@ -7,14 +7,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  fetchWallets,
-  addWallet,
-  removeWallet,
-} from '../../actions/WalletsAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchWallets, addWallet, removeWallet } from '../../actions/WalletsAction';
 
 import _ from 'lodash';
 
@@ -49,7 +46,7 @@ const WalletSettingScreen = () => {
 
   const createWallet = () => {
     if (text === '') return;
-    dispatch(addWallet({label: text}));
+    dispatch(addWallet({ label: text }));
   };
 
   const deleteWallet = async (wallet) => {
@@ -57,27 +54,25 @@ const WalletSettingScreen = () => {
   };
 
   return (
-    <>
+    <SafeAreaView>
       <HeaderNav title="設定錢包" goBack />
       <ScrollView>
         {_.map(wallets, (wallet, walletIdx) => (
           <View key={walletIdx} style={styles.walletRoot}>
-            <Text style={{fontSize: 18}}>{wallet.label}</Text>
-            <TouchableOpacity
-              style={styles.walletDeleteText}
-              onPress={() => deleteWallet(wallet)}>
-              <Text style={{fontSize: 18}}>De</Text>
+            <Text style={{ fontSize: 18 }}>{wallet.label}</Text>
+            <TouchableOpacity style={styles.walletDeleteText} onPress={() => deleteWallet(wallet)}>
+              <Text style={{ fontSize: 18 }}>De</Text>
             </TouchableOpacity>
           </View>
         ))}
         <TextInput
-          style={{borderWidth: 1, borderColor: '#000'}}
+          style={{ borderWidth: 1, borderColor: '#000' }}
           value={text}
           onChangeText={onChangeText}
         />
         <Button title={'Add wallet'} onPress={createWallet} />
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 };
 
