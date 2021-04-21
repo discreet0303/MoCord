@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import _ from 'lodash';
-import moment from 'moment';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
   Alert,
-  ScrollView,
   SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
 } from 'react-native';
+
+import moment from 'moment';
+import _ from 'lodash';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addRecord, updateRecord } from '../actions/recordsAction';
@@ -20,221 +18,156 @@ import { addRecord, updateRecord } from '../actions/recordsAction';
 import HeaderNav from '../componments/HeaderNav';
 import Calculator from '../componments/Calculator';
 
-const RECORD_INIT = {
+const INIT_RECORD = {
   datetime: moment().format('YYYY-MM-DD HH:mm'),
-  type: '食物',
+  type: '',
   money: 0,
-  wallet: '錢包',
+  wallet: '',
   note: '',
   equation: '',
 };
 
 const styles = StyleSheet.create({
-  recordTypeItem: {
-    width: '25%',
+  root: { height: '100%', borderWidth: 3, borderColor: 'blue' },
+  amountSection: {
+    height: 80,
+    justifyContent: 'center',
   },
-  recordTypeItemActive: {
-    width: '25%',
-    backgroundColor: 'gray',
+  amount: {
+    fontSize: 40,
+    textAlign: 'right',
+    color: '#525252',
   },
-  recordTypeItemInactive: {
-    width: '25%',
+  amountEquation: {
+    fontSize: 25,
+    textAlign: 'right',
+    color: '#525252',
   },
-  recordTypeText: {
+  walletSection: {
+    flexDirection: 'row',
+  },
+  wallet: {
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#000',
+    borderWidth: 1,
+  },
+  walletLabel: {
+    fontSize: 18,
+    padding: 10,
+  },
+  typeSection: {
+    marginTop: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  type: {
+    width: '25%',
+    padding: 15,
+  },
+  typeLabel: {
     textAlign: 'center',
-    textAlignVertical: 'center',
-    height: 45,
-    fontSize: 20,
+    fontSize: 18,
   },
-  numberRoot: {
-    // flex: 1,
-    // justifyContent: 'flex-end',
+  active: {
+    backgroundColor: 'gray',
   },
 });
 
 const RecordEditScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const recordTypes = useSelector((state) => state.types);
-  const recordWallets = useSelector((state) => state.wallets);
+  const allTypes = useSelector((state) => state.types);
+  const allWallets = useSelector((state) => state.wallets);
 
-  const editMode = _.has(route.params, 'record') ? true : false;
+  const editMode = route.params.record ? true : false;
   const screenTitle = editMode ? '編輯紀錄' : '新增紀錄';
+  const _record = editMode
+    ? { ...INIT_RECORD, ...route.params.record }
+    : { ...INIT_RECORD, wallet: allWallets[0].label, type: allTypes[0].label };
 
-  const _record = editMode ? { ...RECORD_INIT, ...route.params.record } : RECORD_INIT;
-  const _mathStack = editMode ? _.split(_record.equation, '') : [];
-  _record.datetime = _.has(route.params, 'date')
-    ? moment(route.params.date).format('YYYY-MM-DD HH:mm')
-    : _record.datetime;
+  const [record, setRecord] = useState(_record);
 
-  const [recordData, setRecordData] = useState(_record);
-  const [mathStack, setMathStack] = useState(_mathStack);
-
-  React.useEffect(() => {
-    setRecordData((data) => {
-      const money = mathCalculate(mathStack);
-      return {
-        ...data,
-        money,
-      };
-    });
-  }, [mathStack]);
-
-  const recordHandler = () => {
-    if (recordData.money === 0) return;
+  const handleMoneyCalculate = () => {
     if (editMode) {
-      dispatch(updateRecord({ ...recordData, equation: mathStack.join('') }));
-      Alert.alert(
-        '更新成功',
-        '',
-        [
-          {
-            text: '好',
-            onPress: () => navigation.navigate('RecordList'),
-            style: 'cancel',
-          },
-        ],
-        {
-          cancelable: true,
-          onDismiss: () => navigation.navigate('RecordList'),
-        },
-      );
+      dispatch(updateRecord(record));
+      Alert.alert('更新成功');
     } else {
-      dispatch(addRecord({ ...recordData, equation: mathStack.join('') }));
-      setRecordData(RECORD_INIT);
-      setMathStack([]);
+      dispatch(addRecord(record));
       Alert.alert('新增成功');
     }
   };
 
-  const renderMoneySection = () => {
-    const isExistOperater = _.intersection(['+', '-', 'x', '/'], mathStack);
+  const AmountMoneyText = () => {
+    const isExistOperater = _.some(['+', '-'], (op) => record.equation.includes(op));
     return (
-      <View
-        style={{
-          height: 80,
-          justifyContent: 'center',
-          marginRight: 10,
-        }}
-      >
-        {isExistOperater.length > 0 ? (
-          <>
-            <Text
-              style={{
-                fontSize: 25,
-                textAlign: 'right',
-                color: '#ceaf57',
-              }}
-            >
-              {_.join(mathStack, '')}
-            </Text>
-            <Text
-              style={{
-                fontSize: 40,
-                textAlign: 'right',
-                marginTop: -10,
-                color: '#525252',
-              }}
-            >
-              ${recordData.money}
-            </Text>
-          </>
-        ) : (
-          <Text
-            style={{
-              fontSize: 45,
-              textAlign: 'right',
-              color: '#525252',
-            }}
-          >
-            ${recordData.money}
-          </Text>
-        )}
+      <View style={styles.amountSection}>
+        {isExistOperater && <Text style={styles.amountEquation}>{record.equation}</Text>}
+        <Text style={styles.amount}>{record.money}</Text>
       </View>
     );
   };
 
-  const renderWalletSection = () => (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 3 }}>
-      {_.map(recordWallets, (wallet) => (
-        <TouchableOpacity
-          key={wallet.label}
-          onPress={() =>
-            setRecordData((record) => ({
-              ...record,
-              wallet: wallet.label,
-            }))
-          }
-          style={[
-            {
-              height: 40,
-              width: 50,
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderWidth: 1,
-              borderColor: '#000',
-              marginHorizontal: 10,
-            },
-            recordData.wallet === wallet.label && { backgroundColor: '#999999' },
-          ]}
-        >
-          <Text>{wallet.label}</Text>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
-  );
+  const WalletList = () => {
+    return (
+      <View style={styles.walletSection}>
+        {_.map(allWallets, (wallet) => (
+          <TouchableOpacity
+            key={wallet.label}
+            style={[styles.wallet, record.wallet === wallet.label && { ...styles.active }]}
+            onPress={() => setRecord((record) => ({ ...record, wallet: wallet.label }))}
+          >
+            <Text style={styles.walletLabel}>{wallet.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
+
+  const RecordTypeList = () => {
+    return (
+      <View style={styles.typeSection}>
+        {_.map(allTypes, (type) => (
+          <TouchableOpacity
+            key={type.label}
+            style={[styles.type, record.type === type.label && { ...styles.active }]}
+            onPress={() => setRecord((record) => ({ ...record, type: type.label }))}
+          >
+            <Text style={styles.typeLabel}>{type.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.root}>
       <HeaderNav title={screenTitle} goBack />
-      <KeyboardAvoidingView
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={-200}
+      <AmountMoneyText />
+      <WalletList />
+      <RecordTypeList />
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 20 }}
+        onChangeText={(note) =>
+          setRecord((record) => ({
+            ...record,
+            note,
+          }))
+        }
+        value={record.note}
+      />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+        }}
       >
-        {renderMoneySection()}
-        {renderWalletSection()}
-        {_.map(_.chunk(recordTypes, 4), (rowData, rowIdx) => {
-          return (
-            <View key={rowIdx} style={{ flexDirection: 'row' }}>
-              {_.map(rowData, (recordItem, recordItemIdx) => (
-                <TouchableOpacity
-                  key={recordItemIdx}
-                  style={[
-                    styles.recordTypeItem,
-                    recordData.type == recordItem.label
-                      ? styles.recordTypeItemActive
-                      : styles.recordTypeItemInactive,
-                  ]}
-                  onPress={() =>
-                    setRecordData((record) => ({
-                      ...record,
-                      type: recordItem.label,
-                    }))
-                  }
-                >
-                  <Text style={[styles.recordTypeText]}>{recordItem.label}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          );
-        })}
-        <TextInput
-          style={{ borderColor: 'gray', borderWidth: 1, fontSize: 20 }}
-          onChangeText={(note) =>
-            setRecordData((record) => ({
-              ...record,
-              note,
-            }))
-          }
-          value={recordData.note}
+        <Calculator
+          mathStack={record.equation.split('')}
+          setRecord={setRecord}
+          handleMoneyCalculate={handleMoneyCalculate}
         />
-        <View style={styles.numberRoot}>
-          <Calculator
-            mathStack={mathStack}
-            setMathStack={setMathStack}
-            recordHandler={recordHandler}
-          />
-        </View>
-      </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 };
