@@ -1,5 +1,12 @@
 import React from 'react';
-import { ScrollView, TouchableOpacity, Text, StyleSheet, SafeAreaView } from 'react-native';
+import {
+  ScrollView,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+} from 'react-native';
 
 import HeaderNav from '../../componments/HeaderNav';
 
@@ -9,20 +16,20 @@ const SETTING_PAGE = [
 ];
 
 const styles = StyleSheet.create({
+  root: {},
   settingItem: {
-    height: 40,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
     paddingHorizontal: 20,
+    paddingVertical: 10,
     marginBottom: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 1.41,
-    elevation: 2,
+    backgroundColor: '#fff',
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 5,
+    // },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 1.41,
+    // elevation: 2,
   },
   settingItemText: {
     fontSize: 20,
@@ -30,31 +37,20 @@ const styles = StyleSheet.create({
   },
 });
 
-const SettingItem = ({ navigation, name, screenName }) => {
-  return (
+const SettingListScreen = ({ navigation }) => {
+  const renderSettingItem = ({ item }) => (
     <TouchableOpacity
       style={styles.settingItem}
-      onPress={() => navigation.push('SettingStack', { screen: screenName })}
+      onPress={() => navigation.push('SettingStack', { screen: item.screenName })}
     >
-      <Text style={styles.settingItemText}>{name}</Text>
+      <Text style={styles.settingItemText}>{item.displayName}</Text>
     </TouchableOpacity>
   );
-};
 
-const SettingListScreen = ({ navigation }) => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.root}>
       <HeaderNav title="設定頁面" />
-      <ScrollView>
-        {SETTING_PAGE.map((page, idx) => (
-          <SettingItem
-            key={idx}
-            navigation={navigation}
-            name={page.displayName}
-            screenName={page.screenName}
-          />
-        ))}
-      </ScrollView>
+      <FlatList data={SETTING_PAGE} renderItem={renderSettingItem} />
     </SafeAreaView>
   );
 };

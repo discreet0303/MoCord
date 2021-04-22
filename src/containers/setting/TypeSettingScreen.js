@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,44 +9,54 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import _ from 'lodash';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTypes, addType, removeType } from '../../actions/TypesAction';
-
 import HeaderNav from '../../componments/HeaderNav';
-
+import { fetchTypes, addType, removeType } from '../../actions/TypesAction';
 import { OPERATOR_TYPE } from '../../config';
 
 const styles = StyleSheet.create({
-  typeRoot: {
+  root: {},
+  typeSection: {},
+  typeHeader: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
-    marginVertical: 2,
-    paddingHorizontal: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 40,
+    paddingHorizontal: 20,
   },
-  typeDeleteText: {
-    backgroundColor: '#bbbbbb',
-    height: 40,
-    justifyContent: 'center',
-    padding: 5,
-  },
-  typeSectionText: {
+  typeHeaderText: {
     fontSize: 20,
-    paddingLeft: 20,
-    marginVertical: 10,
+    fontWeight: '600',
   },
+  typeItem: {
+    backgroundColor: '#fff',
+    marginVertical: 2,
+    flexDirection: 'row',
+  },
+  typeItemText: {
+    flex: 1,
+    fontSize: 18,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+  },
+  typeDeleteButton: {
+    backgroundColor: '#bbbbbb',
+    marginRight: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 5,
+  },
+  typeDeleteButtonText: {},
 });
 
 const TypeSettingScreen = () => {
   const dispatch = useDispatch();
   const types = useSelector((state) => _.groupBy(state.types, 'operator'));
-  const [text, onChangeText] = React.useState('');
+  const [text, onChangeText] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchTypes());
   }, [dispatch]);
 
@@ -55,30 +65,35 @@ const TypeSettingScreen = () => {
     dispatch(addType({ label: text, operator: op }));
   };
 
-  const removeRecordType = async (type) => {
-    dispatch(removeType(type));
-  };
+  const renderTypeItem = (type) => (
+    <View key={type.label} style={styles.typeItem}>
+      <Text style={styles.typeItemText}>{type.label}</Text>
+      <TouchableOpacity style={styles.typeDeleteButton} onPress={() => dispatch(removeType(type))}>
+        <Text style={styles.typeDeleteButtonText}>De</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <SafeAreaView>
       <HeaderNav title="設定類別" goBack />
       <ScrollView>
-        {_.map(_.keys(types), (op, idx) => (
-          <View key={op}>
-            <Text style={styles.typeSectionText}>{op}</Text>
-            {_.map(types[op], (type, typeIdx) => (
-              <View key={typeIdx} style={styles.typeRoot}>
-                <Text style={{ fontSize: 18 }}>{type.label}</Text>
-                <TouchableOpacity
-                  style={styles.typeDeleteText}
-                  onPress={() => removeRecordType(type)}
-                >
-                  <Text style={{ fontSize: 18 }}>De</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+        <View style={styles.typeSection}>
+          <View style={styles.typeHeader}>
+            <Text style={styles.typeHeaderText}>支出</Text>
+            <Button title={'add'} onPress={() => {}} />
           </View>
-        ))}
+          {_.map(types['pos'], (type) => renderTypeItem(type))}
+        </View>
+        <View style={styles.typeSection}>
+          <View style={styles.typeHeader}>
+            <Text style={styles.typeHeaderText}>收入</Text>
+            <Button title={'add'} onPress={() => {}} />
+          </View>
+          {_.map(types['neg'], (type) => renderTypeItem(type))}
+        </View>
+      </ScrollView>
+      <ScrollView>
         <TextInput
           style={{ borderWidth: 1, borderColor: '#000' }}
           value={text}
