@@ -8,12 +8,14 @@ import {
   View,
   Button,
 } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import moment from 'moment';
 import _ from 'lodash';
 
 import HeaderNav from '../componments/HeaderNav';
 import { getRecordByMonth } from '../utils/fileManager';
+import { calcuTotalMoney } from '../utils/record';
 
 const styles = StyleSheet.create({
   root: {},
@@ -71,6 +73,7 @@ const styles = StyleSheet.create({
 
 const RecordStatisticScreen = ({ navigation }) => {
   const year = moment().year();
+  const types = useSelector((state) => state.types);
 
   const [month, setMonth] = useState(moment().month() + 1);
   const [monthReocrds, setMonthRecords] = useState([]);
@@ -136,7 +139,7 @@ const RecordStatisticScreen = ({ navigation }) => {
         ))}
         <View style={{ ...styles.recordAmount, marginHorizontal: 10 }}>
           <Text style={[styles.recordText, { flex: 1 }]}>合計</Text>
-          <Text style={styles.recordText}>{_.sumBy(metadata, (item) => Number(item.amount))}</Text>
+          <Text style={styles.recordText}>{calcuTotalMoney(monthReocrds, types)}</Text>
         </View>
       </View>
     );
@@ -154,8 +157,8 @@ const RecordStatisticScreen = ({ navigation }) => {
             <View style={styles.recordItemTitle}>
               <Text style={styles.recordItemTitleText}>{key}</Text>
             </View>
-            {_.map(metadata[key], (record) => (
-              <View key={record.id} style={styles.recordRow}>
+            {_.map(metadata[key], (record, idx) => (
+              <View key={idx} style={styles.recordRow}>
                 <Text style={[styles.recordText, { paddingRight: 10 }]}>
                   {moment(record.datetime).format('DD')}
                 </Text>
@@ -165,9 +168,7 @@ const RecordStatisticScreen = ({ navigation }) => {
             ))}
             <View style={styles.recordAmount}>
               <Text style={[styles.recordText, { flex: 1 }]}>合計</Text>
-              <Text style={styles.recordText}>
-                {_.sum(_.map(metadata[key], (r) => _.toInteger(r.money)))}
-              </Text>
+              <Text style={styles.recordText}>{calcuTotalMoney(metadata[key], types)}</Text>
             </View>
           </View>
         ))}

@@ -36,7 +36,7 @@ export default mathCalculate = (mathStack) => {
 
   if (output === undefined) {
     if (_.includes(['+', '-'], _.last(_mathStack))) _mathStack.pop();
-    return _.toInteger(_.join(_mathStack, ''));
+    return Number(_.join(_mathStack, ''));
   }
   return output;
 };
