@@ -28,7 +28,7 @@ const INIT_RECORD = {
 };
 
 const styles = StyleSheet.create({
-  root: { height: '100%', borderWidth: 3, borderColor: 'blue' },
+  root: { height: '100%' },
   amountSection: {
     height: 80,
     justifyContent: 'center',
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   amountEquation: {
     fontSize: 25,
     textAlign: 'right',
-    color: '#525252',
+    color: '#ceaf57',
   },
   walletSection: {
     flexDirection: 'row',
@@ -96,6 +96,7 @@ const RecordEditScreen = ({ navigation, route }) => {
       dispatch(addRecord(record));
       Alert.alert('新增成功');
     }
+    setRecord(INIT_RECORD);
   };
 
   const AmountMoneyText = () => {
