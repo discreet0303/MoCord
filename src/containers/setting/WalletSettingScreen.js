@@ -1,76 +1,78 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
   Button,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
   SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  View,
+  TouchableOpacity,
 } from 'react-native';
-
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchWallets, addWallet, removeWallet } from '../../actions/WalletsAction';
 
 import _ from 'lodash';
 
+import { fetchWallets, removeWallet } from '../../actions/WalletsAction';
 import HeaderNav from '../../componments/HeaderNav';
 
 const styles = StyleSheet.create({
-  walletRoot: {
+  walletHeader: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  walletRow: {
+    backgroundColor: '#fff',
     marginVertical: 2,
+    flexDirection: 'row',
     paddingHorizontal: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 40,
   },
-  walletDeleteText: {
+  walletDeleteButton: {
     backgroundColor: '#bbbbbb',
-    height: 40,
     justifyContent: 'center',
-    padding: 5,
+    alignItems: 'center',
+    paddingVertical: 8,
   },
 });
 
-const WalletSettingScreen = () => {
+const WalletSettingScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const wallets = useSelector((state) => state.wallets);
-  const [text, onChangeText] = React.useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchWallets());
   }, [dispatch]);
-
-  const createWallet = () => {
-    if (text === '') return;
-    dispatch(addWallet({ label: text }));
-  };
-
-  const deleteWallet = async (wallet) => {
-    dispatch(removeWallet(wallet));
-  };
 
   return (
     <SafeAreaView>
       <HeaderNav title="設定錢包" goBack />
       <ScrollView>
+        <View style={styles.walletHeader}>
+          <Text style={{ fontSize: 18 }}>錢包</Text>
+          <Button
+            title="add"
+            onPress={() =>
+              navigation.push('SettingStack', {
+                screen: 'CreateSetting',
+                params: { mode: 'wallet' },
+              })
+            }
+          />
+        </View>
         {_.map(wallets, (wallet, walletIdx) => (
-          <View key={walletIdx} style={styles.walletRoot}>
-            <Text style={{ fontSize: 18 }}>{wallet.label}</Text>
-            <TouchableOpacity style={styles.walletDeleteText} onPress={() => deleteWallet(wallet)}>
-              <Text style={{ fontSize: 18 }}>De</Text>
+          <View key={walletIdx} style={styles.walletRow}>
+            <Text>{wallet.label}</Text>
+            <TouchableOpacity
+              style={styles.walletDeleteButton}
+              onPress={() => dispatch(removeWallet(wallet))}
+            >
+              <Text style={{ fontSize: 16 }}>De</Text>
             </TouchableOpacity>
           </View>
         ))}
-        <TextInput
-          style={{ borderWidth: 1, borderColor: '#000' }}
-          value={text}
-          onChangeText={onChangeText}
-        />
-        <Button title={'Add wallet'} onPress={createWallet} />
       </ScrollView>
     </SafeAreaView>
   );

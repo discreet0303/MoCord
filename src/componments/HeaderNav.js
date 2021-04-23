@@ -11,13 +11,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 3,
     paddingHorizontal: 10,
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.43,
-    shadowRadius: 9.51,
-    elevation: 15,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 7,
+    // },
+    // shadowOpacity: 0.43,
+    // shadowRadius: 9.51,
+    // elevation: 15,
   },
   flex1: {
     flex: 1,

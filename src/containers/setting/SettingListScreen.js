@@ -22,14 +22,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 5,
     backgroundColor: '#fff',
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 5,
-    // },
-    // shadowOpacity: 0.5,
-    // shadowRadius: 1.41,
-    // elevation: 2,
   },
   settingItemText: {
     fontSize: 20,
@@ -50,7 +42,11 @@ const SettingListScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.root}>
       <HeaderNav title="設定頁面" />
-      <FlatList data={SETTING_PAGE} renderItem={renderSettingItem} />
+      <FlatList
+        data={SETTING_PAGE}
+        renderItem={renderSettingItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </SafeAreaView>
   );
 };

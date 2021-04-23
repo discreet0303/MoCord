@@ -14,8 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 
 import HeaderNav from '../../componments/HeaderNav';
-import { fetchTypes, addType, removeType } from '../../actions/TypesAction';
-import { OPERATOR_TYPE } from '../../config';
+import { fetchTypes, removeType } from '../../actions/TypesAction';
 
 const styles = StyleSheet.create({
   root: {},
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
   typeDeleteButtonText: {},
 });
 
-const TypeSettingScreen = () => {
+const TypeSettingScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const types = useSelector((state) => _.groupBy(state.types, 'operator'));
   const [text, onChangeText] = useState('');
@@ -59,11 +58,6 @@ const TypeSettingScreen = () => {
   useEffect(() => {
     dispatch(fetchTypes());
   }, [dispatch]);
-
-  const addRecordType = (op) => {
-    if (text === '') return;
-    dispatch(addType({ label: text, operator: op }));
-  };
 
   const renderTypeItem = (type) => (
     <View key={type.label} style={styles.typeItem}>
@@ -81,26 +75,33 @@ const TypeSettingScreen = () => {
         <View style={styles.typeSection}>
           <View style={styles.typeHeader}>
             <Text style={styles.typeHeaderText}>支出</Text>
-            <Button title={'add'} onPress={() => {}} />
+            <Button
+              title={'add'}
+              onPress={() =>
+                navigation.push('SettingStack', {
+                  screen: 'CreateSetting',
+                  params: { mode: 'type' },
+                })
+              }
+            />
           </View>
           {_.map(types['pos'], (type) => renderTypeItem(type))}
         </View>
         <View style={styles.typeSection}>
           <View style={styles.typeHeader}>
             <Text style={styles.typeHeaderText}>收入</Text>
-            <Button title={'add'} onPress={() => {}} />
+            <Button
+              title={'add'}
+              onPress={() =>
+                navigation.push('SettingStack', {
+                  screen: 'CreateSetting',
+                  params: { mode: 'type' },
+                })
+              }
+            />
           </View>
           {_.map(types['neg'], (type) => renderTypeItem(type))}
         </View>
-      </ScrollView>
-      <ScrollView>
-        <TextInput
-          style={{ borderWidth: 1, borderColor: '#000' }}
-          value={text}
-          onChangeText={onChangeText}
-        />
-        <Button title={'Add Pos Type'} onPress={() => addRecordType(OPERATOR_TYPE.position)} />
-        <Button title={'Add Neg Type'} onPress={() => addRecordType(OPERATOR_TYPE.negative)} />
       </ScrollView>
     </SafeAreaView>
   );
