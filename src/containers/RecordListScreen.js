@@ -75,7 +75,7 @@ const RecordListScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <HeaderNav title={moment(date).format('YYYY/MM/DD')} />
       <Calendar
         current={date}
