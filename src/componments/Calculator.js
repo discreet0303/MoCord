@@ -53,6 +53,7 @@ const Calculator = ({ mathStack, setRecord, handleMoneyCalculate }) => {
   const handleOperator = (op) => {
     if (op === 'v') {
       handleMoneyCalculate();
+      setStack([]);
       return;
     }
     if (op === 'x') return;
