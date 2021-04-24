@@ -85,6 +85,7 @@ const RecordEditScreen = ({ navigation, route }) => {
   const _record = editMode
     ? { ...INIT_RECORD, ...route.params.record }
     : { ...INIT_RECORD, wallet: allWallets[0].label, type: allTypes[0].label };
+  _record.datetime = route.params.date ?? _record.datetime;
 
   const [record, setRecord] = useState(_record);
 
@@ -96,7 +97,7 @@ const RecordEditScreen = ({ navigation, route }) => {
       dispatch(addRecord(record));
       Alert.alert('新增成功');
     }
-    setRecord(INIT_RECORD);
+    setRecord({ ...INIT_RECORD, wallet: allWallets[0].label, type: allTypes[0].label });
   };
 
   const AmountMoneyText = () => {
@@ -128,9 +129,9 @@ const RecordEditScreen = ({ navigation, route }) => {
   const RecordTypeList = () => {
     return (
       <View style={styles.typeSection}>
-        {_.map(allTypes, (type) => (
+        {_.map(allTypes, (type, idx) => (
           <TouchableOpacity
-            key={type.label}
+            key={idx}
             style={[styles.type, record.type === type.label && { ...styles.active }]}
             onPress={() => setRecord((record) => ({ ...record, type: type.label }))}
           >
