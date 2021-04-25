@@ -1,3 +1,5 @@
+import moment from 'moment';
+import _ from 'lodash';
 import React, { useState } from 'react';
 import {
   Alert,
@@ -8,11 +10,9 @@ import {
   View,
   TextInput,
 } from 'react-native';
-
-import moment from 'moment';
-import _ from 'lodash';
-
 import { useDispatch, useSelector } from 'react-redux';
+import Modal from 'react-native-modal';
+
 import { addRecord, updateRecord } from '../actions/recordsAction';
 
 import HeaderNav from '../componments/HeaderNav';
@@ -47,15 +47,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   wallet: {
-    marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#000',
     borderWidth: 1,
+    height: 50,
+    padding: 5,
   },
   walletLabel: {
     fontSize: 18,
-    padding: 10,
   },
   typeSection: {
     marginTop: 10,
@@ -85,9 +85,10 @@ const RecordEditScreen = ({ navigation, route }) => {
   const _record = editMode
     ? { ...INIT_RECORD, ...route.params.record }
     : { ...INIT_RECORD, wallet: allWallets[0].label, type: allTypes[0].label };
-  _record.datetime = route.params.date ?? _record.datetime;
+  _record.datetime = route.params.date;
 
   const [record, setRecord] = useState(_record);
+  const [walletModal, setWalletModal] = useState(false);
 
   const handleMoneyCalculate = () => {
     if (editMode) {
@@ -97,31 +98,32 @@ const RecordEditScreen = ({ navigation, route }) => {
       dispatch(addRecord(record));
       Alert.alert('新增成功');
     }
-    setRecord({ ...INIT_RECORD, wallet: allWallets[0].label, type: allTypes[0].label });
+    setRecord((r) => ({
+      ...r,
+      money: 0,
+      note: '',
+      equation: '',
+    }));
   };
 
-  const AmountMoneyText = () => {
+  const AmountMoneySection = () => {
     const isExistOperater = _.some(['+', '-'], (op) => record.equation.includes(op));
     return (
-      <View style={styles.amountSection}>
-        {isExistOperater && <Text style={styles.amountEquation}>{record.equation}</Text>}
-        <Text style={styles.amount}>{record.money}</Text>
-      </View>
-    );
-  };
-
-  const WalletList = () => {
-    return (
-      <View style={styles.walletSection}>
-        {_.map(allWallets, (wallet) => (
-          <TouchableOpacity
-            key={wallet.label}
-            style={[styles.wallet, record.wallet === wallet.label && { ...styles.active }]}
-            onPress={() => setRecord((record) => ({ ...record, wallet: wallet.label }))}
-          >
-            <Text style={styles.walletLabel}>{wallet.label}</Text>
-          </TouchableOpacity>
-        ))}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginHorizontal: 10,
+          alignItems: 'center',
+        }}
+      >
+        <TouchableOpacity style={styles.wallet} onPress={() => setWalletModal(!walletModal)}>
+          <Text style={styles.walletLabel}>{record.wallet}</Text>
+        </TouchableOpacity>
+        <View style={styles.amountSection}>
+          {isExistOperater && <Text style={styles.amountEquation}>{record.equation}</Text>}
+          <Text style={styles.amount}>{record.money}</Text>
+        </View>
       </View>
     );
   };
@@ -145,8 +147,7 @@ const RecordEditScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.root}>
       <HeaderNav title={screenTitle} goBack />
-      <AmountMoneyText />
-      <WalletList />
+      <AmountMoneySection />
       <RecordTypeList />
       <TextInput
         style={{ height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 20 }}
@@ -170,6 +171,35 @@ const RecordEditScreen = ({ navigation, route }) => {
           handleMoneyCalculate={handleMoneyCalculate}
         />
       </View>
+
+      <Modal
+        testID={'modal'}
+        isVisible={walletModal}
+        backdropOpacity={0.2}
+        style={{ justifyContent: 'flex-end', margin: 0 }}
+      >
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => setWalletModal(false)}
+        ></TouchableOpacity>
+        <View style={{ backgroundColor: 'white', paddingBottom: 50 }}>
+          <TouchableOpacity onPress={() => setWalletModal(false)}>
+            <Text style={{ textAlign: 'right', fontSize: 25, padding: 20 }}>X</Text>
+          </TouchableOpacity>
+          {_.map(allWallets, (wallet) => (
+            <TouchableOpacity
+              key={wallet.label}
+              style={{ justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}
+              onPress={() => {
+                setRecord((record) => ({ ...record, wallet: wallet.label }));
+                setWalletModal(false);
+              }}
+            >
+              <Text style={styles.walletLabel}>{wallet.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
