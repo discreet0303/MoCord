@@ -19,8 +19,13 @@ const styles = StyleSheet.create({
     // shadowRadius: 9.51,
     // elevation: 15,
   },
-  flex1: {
+  leftSection: {
     flex: 1,
+  },
+  rightSection: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   title: {
     fontSize: 20,
@@ -45,9 +50,9 @@ const HeaderNav = ({
 }) => {
   return (
     <View style={styles.root}>
-      <View style={styles.flex1}>{goBack ? <GoBack /> : renderLeftSection}</View>
+      <View style={styles.leftSection}>{goBack ? <GoBack /> : renderLeftSection}</View>
       <Text style={styles.title}>{title}</Text>
-      <View style={styles.flex1}>{renderRightSection}</View>
+      <View style={styles.rightSection}>{renderRightSection}</View>
     </View>
   );
 };
