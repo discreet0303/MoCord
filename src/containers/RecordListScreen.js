@@ -1,5 +1,13 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+  Button,
+} from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 import _ from 'lodash';
@@ -13,6 +21,7 @@ import HeaderNav from '../componments/HeaderNav';
 import RecordItem from '../componments/RecordItem';
 
 import { calcuTotalMoney } from '../utils/record';
+import { dateOnly } from '../utils/formatter';
 
 const styles = StyleSheet.create({
   root: {
@@ -58,14 +67,15 @@ const RecordListScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const records = useSelector((state) => state.records.records);
   const types = useSelector((state) => state.types);
-  const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));
+  const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+  const [calcu, setCalcu] = useState(true);
 
   // TODO: INIT STATE
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchTypes());
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchRecord(date));
   }, [date]);
 
@@ -76,25 +86,34 @@ const RecordListScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <HeaderNav title={moment(date).format('YYYY/MM/DD')} />
-      <Calendar
-        current={date}
-        monthFormat={'yyyy/MM'}
-        onDayPress={(day) => setDate(day.dateString)}
-        markingType={'custom'}
-        markedDates={{
-          [date]: {
-            customStyles: {
-              container: {
-                backgroundColor: '#00adf5',
-              },
-              text: {
-                color: 'white',
+      <HeaderNav
+        title={dateOnly()}
+        renderRightSection={
+          <TouchableOpacity onPress={() => setCalcu(!calcu)}>
+            <Text>calendar</Text>
+          </TouchableOpacity>
+        }
+      />
+      <View style={{ display: calcu ? 'flex' : 'none' }}>
+        <Calendar
+          current={date}
+          monthFormat={'yyyy/MM'}
+          onDayPress={(day) => setDate(day.dateString)}
+          markingType={'custom'}
+          markedDates={{
+            [date]: {
+              customStyles: {
+                container: {
+                  backgroundColor: '#00adf5',
+                },
+                text: {
+                  color: 'white',
+                },
               },
             },
-          },
-        }}
-      />
+          }}
+        />
+      </View>
       <View style={styles.totalSection}>
         <Text style={styles.totalText}>總和</Text>
         <Text style={styles.totalText}>{calcuTotalMoney(records, types)}</Text>
