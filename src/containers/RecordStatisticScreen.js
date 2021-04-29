@@ -19,7 +19,7 @@ import { calcuTotalMoney } from '../utils/record';
 
 const styles = StyleSheet.create({
   root: {},
-  monthSection: { height: 50, paddingVertical: 5 },
+  monthSection: { paddingVertical: 5, height: 60 },
   month: {
     width: 40,
     height: 40,
@@ -177,25 +177,27 @@ const RecordStatisticScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
-      <HeaderNav title={`${month} 月統計`} />
-      <MonthSection />
-      {monthReocrds.length === 0 ? (
-        <View style={{ marginTop: 10 }}>
-          <Text style={{ textAlign: 'center', fontSize: 20 }}>無紀錄</Text>
-        </View>
-      ) : (
-        <>
-          <SummarySection />
-          <ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View>
+        <HeaderNav title={`${month} 月統計`} />
+        <MonthSection />
+      </View>
+      <ScrollView>
+        {monthReocrds.length === 0 ? (
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ textAlign: 'center', fontSize: 20 }}>無紀錄</Text>
+          </View>
+        ) : (
+          <>
+            <SummarySection />
             <View style={{ flexDirection: 'row' }}>
               <Button title={'類別'} onPress={() => setGroupByMethod('type')} />
               <Button title={'備註'} onPress={() => setGroupByMethod('note')} />
             </View>
             <RecordSection />
-          </ScrollView>
-        </>
-      )}
+          </>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
