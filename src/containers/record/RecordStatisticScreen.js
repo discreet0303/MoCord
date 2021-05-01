@@ -1,3 +1,5 @@
+import moment from 'moment';
+import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
@@ -9,9 +11,6 @@ import {
   Button,
 } from 'react-native';
 import { useSelector } from 'react-redux';
-
-import moment from 'moment';
-import _ from 'lodash';
 
 import HeaderNav from '../../componments/HeaderNav';
 import YearMonthPickerModal from '../../componments/record/YearMonthPickerModal';

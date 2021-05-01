@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 
 const styles = StyleSheet.create({
