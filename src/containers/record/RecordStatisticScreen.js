@@ -13,12 +13,28 @@ import { useSelector } from 'react-redux';
 import moment from 'moment';
 import _ from 'lodash';
 
-import HeaderNav from '../componments/HeaderNav';
-import { getRecordByMonth } from '../utils/fileManager';
-import { calcuTotalMoney } from '../utils/record';
+import HeaderNav from '../../componments/HeaderNav';
+import YearMonthPickerModal from '../../componments/record/YearMonthPickerModal';
+import { getRecordByMonth } from '../../utils/fileManager';
+import { calcuTotalMoney } from '../../utils/record';
+import themeColor from '../../utils/theme';
+import { FILTER_TYPE } from '../../utils/statistic';
 
 const styles = StyleSheet.create({
-  root: {},
+  root: { flex: 1, backgroundColor: themeColor.background },
+  statisticTypeSection: {
+    flexDirection: 'row',
+    borderBottomColor: themeColor.gray,
+    borderBottomWidth: 2,
+  },
+  statisticType: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 5 },
+  statisticTypeText: {
+    fontSize: 25,
+    color: themeColor.gray,
+  },
+  statisticTypeTextActive: {
+    color: '#000',
+  },
   monthSection: { paddingVertical: 5, height: 60 },
   month: {
     width: 40,
@@ -75,9 +91,11 @@ const RecordStatisticScreen = ({ navigation }) => {
   const year = moment().year();
   const types = useSelector((state) => state.types);
 
+  const [filterType, setFilterType] = useState(FILTER_TYPE.month);
   const [month, setMonth] = useState(moment().month() + 1);
   const [monthReocrds, setMonthRecords] = useState([]);
   const [groupByMethod, setGroupByMethod] = useState('type');
+  const [dateModal, setDateModal] = useState(false);
 
   useEffect(() => {
     const runAsync = async () => {
@@ -92,20 +110,39 @@ const RecordStatisticScreen = ({ navigation }) => {
     return forceListener;
   }, [month]);
 
-  const MonthSection = () => {
+  const StatisticTypeSection = () => {
+    const types = _.keys(FILTER_TYPE);
+
     return (
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.monthSection}>
-        {_.map(_.times(12), (monthNum) => (
+      <View style={styles.statisticTypeSection}>
+        {_.map(types, (type, idx) => (
           <TouchableOpacity
-            key={monthNum}
-            style={[styles.month, monthNum + 1 === month && { ...styles.active }]}
-            onPress={() => setMonth(monthNum + 1)}
+            key={idx}
+            style={styles.statisticType}
+            onPress={() => {
+              setFilterType(FILTER_TYPE[type]);
+              setDateModal(true);
+            }}
+            disabled={type !== 'month'}
           >
-            <Text>{monthNum + 1}</Text>
+            <Text
+              style={[
+                styles.statisticTypeText,
+                filterType === FILTER_TYPE[type] && styles.statisticTypeTextActive,
+              ]}
+            >
+              {FILTER_TYPE[type].label}
+            </Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+        <YearMonthPickerModal isOpen={dateModal} onMonthPress={onMonthPress} />
+      </View>
     );
+  };
+
+  const onMonthPress = (month) => {
+    setDateModal(false);
+    setMonth(month);
   };
 
   const SummarySection = () => {
@@ -177,11 +214,9 @@ const RecordStatisticScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View>
-        <HeaderNav title={`${month} 月統計`} />
-        <MonthSection />
-      </View>
+    <SafeAreaView style={styles.root}>
+      <HeaderNav title={`${month} 月統計`} />
+      <StatisticTypeSection />
       <ScrollView>
         {monthReocrds.length === 0 ? (
           <View style={{ marginTop: 10 }}>

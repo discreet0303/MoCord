@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  TextInput,
   Button,
   TouchableOpacity,
   StyleSheet,
@@ -15,15 +14,17 @@ import _ from 'lodash';
 
 import HeaderNav from '../../componments/HeaderNav';
 import { fetchTypes, removeType } from '../../actions/TypesAction';
+import themeColor from '../../utils/theme';
 
 const styles = StyleSheet.create({
-  root: {},
+  root: { backgroundColor: themeColor.background },
   typeSection: {},
   typeHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: themeColor.gray,
   },
   typeHeaderText: {
     fontSize: 20,
@@ -53,7 +54,6 @@ const styles = StyleSheet.create({
 const TypeSettingScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const types = useSelector((state) => _.groupBy(state.types, 'operator'));
-  const [text, onChangeText] = useState('');
 
   useEffect(() => {
     dispatch(fetchTypes());
@@ -69,7 +69,7 @@ const TypeSettingScreen = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.root}>
       <HeaderNav title="設定類別" goBack />
       <ScrollView>
         <View style={styles.typeSection}>

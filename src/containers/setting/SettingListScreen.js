@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  FlatList,
-} from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, SafeAreaView, FlatList } from 'react-native';
 
 import HeaderNav from '../../componments/HeaderNav';
+import themeColor from '../../utils/theme';
 
 const SETTING_PAGE = [
   { screenName: 'TypeSetting', displayName: '設定類別' },
@@ -16,12 +10,15 @@ const SETTING_PAGE = [
 ];
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+    backgroundColor: themeColor.background,
+  },
   settingItem: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     marginBottom: 5,
-    backgroundColor: '#fff',
+    backgroundColor: themeColor.gray,
   },
   settingItemText: {
     fontSize: 20,

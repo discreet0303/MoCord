@@ -14,13 +14,16 @@ import _ from 'lodash';
 
 import { fetchWallets, removeWallet } from '../../actions/WalletsAction';
 import HeaderNav from '../../componments/HeaderNav';
+import themeColor from '../../utils/theme';
 
 const styles = StyleSheet.create({
+  root: { backgroundColor: themeColor.background },
   walletHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: themeColor.gray,
   },
   walletRow: {
     backgroundColor: '#fff',
@@ -47,7 +50,7 @@ const WalletSettingScreen = ({ navigation }) => {
   }, [dispatch]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.root}>
       <HeaderNav title="設定錢包" goBack />
       <ScrollView>
         <View style={styles.walletHeader}>

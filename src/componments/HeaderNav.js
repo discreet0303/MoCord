@@ -1,23 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
 import { useNavigation } from '@react-navigation/native';
+import themeColor from '../utils/theme';
 
 const styles = StyleSheet.create({
   root: {
     height: 45,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: themeColor.background,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 3,
     paddingHorizontal: 10,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 7,
-    // },
-    // shadowOpacity: 0.43,
-    // shadowRadius: 9.51,
-    // elevation: 15,
   },
   leftSection: {
     flex: 1,
@@ -44,6 +37,7 @@ const GoBack = () => {
 
 const HeaderNav = ({
   title = '',
+  titleHandler,
   renderLeftSection = null,
   renderRightSection = null,
   goBack = false,
@@ -51,7 +45,14 @@ const HeaderNav = ({
   return (
     <View style={styles.root}>
       <View style={styles.leftSection}>{goBack ? <GoBack /> : renderLeftSection}</View>
-      <Text style={styles.title}>{title}</Text>
+      {titleHandler ? (
+        <TouchableOpacity onPress={titleHandler}>
+          <Text style={styles.title}>{title}</Text>
+        </TouchableOpacity>
+      ) : (
+        <Text style={styles.title}>{title}</Text>
+      )}
+
       <View style={styles.rightSection}>{renderRightSection}</View>
     </View>
   );

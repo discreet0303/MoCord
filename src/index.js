@@ -9,9 +9,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import RootReducer from './reducers';
 
-import RecordListScreen from './containers/RecordListScreen';
-import RecordEditScreen from './containers/RecordEditScreen';
-import RecordStatisticScreen from './containers/RecordStatisticScreen';
+import LogoScreen from './containers/LogoScreen';
+import RecordListScreen from './containers/record/RecordListScreen';
+import RecordEditScreen from './containers/record/RecordEditScreen';
+import RecordStatisticScreen from './containers/record/RecordStatisticScreen';
 import SettingListScreen from './containers/setting/SettingListScreen';
 import TypeSettingScreen from './containers/setting/TypeSettingScreen';
 import WalletSettingScreen from './containers/setting/WalletSettingScreen';
@@ -47,6 +48,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator headerMode="none">
+          <Stack.Screen name="Logo" component={LogoScreen} />
           <Stack.Screen name="TabStack" component={TabStack} />
           <Stack.Screen name="RecordEdit" component={RecordEditScreen} />
           <Stack.Screen name="SettingStack" component={SettingStack} />

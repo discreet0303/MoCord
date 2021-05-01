@@ -9,14 +9,17 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-native-modal';
 
-import { addRecord, updateRecord } from '../actions/recordsAction';
+import { addRecord, updateRecord } from '../../actions/recordsAction';
 
-import HeaderNav from '../componments/HeaderNav';
-import Calculator from '../componments/Calculator';
+import HeaderNav from '../../componments/HeaderNav';
+import Calculator from '../../componments/Calculator';
+import themeColor from '../../utils/theme';
 
 const INIT_RECORD = {
   datetime: moment().format('YYYY-MM-DD HH:mm'),
@@ -28,7 +31,11 @@ const INIT_RECORD = {
 };
 
 const styles = StyleSheet.create({
-  root: { height: '100%' },
+  flex: { flex: 1 },
+  root: {
+    flex: 1,
+    backgroundColor: themeColor.background,
+  },
   amountSection: {
     height: 80,
     justifyContent: 'center',
@@ -146,34 +153,30 @@ const RecordEditScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <HeaderNav title={screenTitle} goBack />
-      <AmountMoneySection />
-      <RecordTypeList />
-      <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 20 }}
-        onChangeText={(note) =>
-          setRecord((record) => ({
-            ...record,
-            note,
-          }))
-        }
-        value={record.note}
-      />
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-        }}
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <Calculator
-          mathStack={record.equation.split('')}
-          setRecord={setRecord}
-          handleMoneyCalculate={handleMoneyCalculate}
+        <HeaderNav title={screenTitle} goBack />
+        <AmountMoneySection />
+        <RecordTypeList />
+        <TextInput
+          style={{ height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 20 }}
+          onChangeText={(note) =>
+            setRecord((record) => ({
+              ...record,
+              note,
+            }))
+          }
+          value={record.note}
         />
-      </View>
-
+      </KeyboardAvoidingView>
+      <Calculator
+        mathStack={record.equation.split('')}
+        setRecord={setRecord}
+        handleMoneyCalculate={handleMoneyCalculate}
+      />
       <Modal
-        testID={'modal'}
         isVisible={walletModal}
         backdropOpacity={0.2}
         style={{ justifyContent: 'flex-end', margin: 0 }}
