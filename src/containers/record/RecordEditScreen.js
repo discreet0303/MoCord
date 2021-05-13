@@ -161,7 +161,7 @@ const RecordEditScreen = ({ navigation, route }) => {
         <AmountMoneySection />
         <RecordTypeList />
         <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 20 }}
+          style={{ borderColor: 'gray', borderWidth: 1, fontSize: 20 }}
           onChangeText={(note) =>
             setRecord((record) => ({
               ...record,
@@ -176,6 +176,13 @@ const RecordEditScreen = ({ navigation, route }) => {
         setRecord={setRecord}
         handleMoneyCalculate={handleMoneyCalculate}
       />
+      <View
+        style={{
+          backgroundColor: '#282c34',
+          height: Platform.OS === 'ios' ? 50 : 0,
+          marginBottom: Platform.OS === 'ios' ? -50 : 0,
+        }}
+      ></View>
       <Modal
         isVisible={walletModal}
         backdropOpacity={0.2}

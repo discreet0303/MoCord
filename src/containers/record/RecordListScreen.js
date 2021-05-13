@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { fetchRecord, setRecord } from '../../actions/recordsAction';
 import HeaderNav from '../../componments/HeaderNav';
@@ -70,35 +71,33 @@ const RecordListScreen = ({ navigation }) => {
         titleHandler={() => setDate(dateOnly())}
         renderRightSection={
           <TouchableOpacity onPress={() => setCalendarOpen((open) => !open)}>
-            <Text>Calendar</Text>
+            <Ionicons name={isCalendarOpen ? 'ios-calendar' : 'ios-calendar-outline'} size={30} />
           </TouchableOpacity>
         }
       />
-      {isCalendarOpen && (
-        <CalendarList
-          current={date}
-          style={{ height: 320 }}
-          onDayPress={(day) => setDate(day.dateString)}
-          renderHeader={(date) => {}}
-          horizontal={true}
-          pagingEnabled={true}
-          enableSwipeMonths={true}
-          onVisibleMonthsChange={onVisibleMonthsChange}
-          markingType={'custom'}
-          markedDates={{
-            [date]: {
-              customStyles: {
-                container: {
-                  backgroundColor: '#00adf5',
-                },
-                text: {
-                  color: '#fff',
-                },
+      <CalendarList
+        current={date}
+        style={{ height: isCalendarOpen ? 320 : 0 }}
+        onDayPress={(day) => setDate(day.dateString)}
+        renderHeader={(date) => {}}
+        horizontal={true}
+        pagingEnabled={true}
+        enableSwipeMonths={true}
+        onVisibleMonthsChange={onVisibleMonthsChange}
+        markingType={'custom'}
+        markedDates={{
+          [date]: {
+            customStyles: {
+              container: {
+                backgroundColor: '#00adf5',
+              },
+              text: {
+                color: '#fff',
               },
             },
-          }}
-        />
-      )}
+          },
+        }}
+      />
       <View style={styles.totalSection}>
         <Text style={styles.totalText}>總和</Text>
         <Text style={styles.totalText}>{calcuTotalMoney(records, types)}</Text>

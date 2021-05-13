@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { useEffect } from 'react';
 import {
   Button,
@@ -10,8 +11,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import _ from 'lodash';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { fetchWallets, removeWallet } from '../../actions/WalletsAction';
 import HeaderNav from '../../componments/HeaderNav';
 import themeColor from '../../utils/theme';
@@ -55,15 +55,16 @@ const WalletSettingScreen = ({ navigation }) => {
       <ScrollView>
         <View style={styles.walletHeader}>
           <Text style={{ fontSize: 18 }}>錢包</Text>
-          <Button
-            title="add"
+          <TouchableOpacity
             onPress={() =>
               navigation.push('SettingStack', {
                 screen: 'CreateSetting',
                 params: { mode: 'wallet' },
               })
             }
-          />
+          >
+            <Ionicons name="add" size={30} color="#000" />
+          </TouchableOpacity>
         </View>
         {_.map(wallets, (wallet, walletIdx) => (
           <View key={walletIdx} style={styles.walletRow}>

@@ -17,6 +17,7 @@ import SettingListScreen from './containers/setting/SettingListScreen';
 import TypeSettingScreen from './containers/setting/TypeSettingScreen';
 import WalletSettingScreen from './containers/setting/WalletSettingScreen';
 import CreateSettingScreen from './containers/setting/CreateSettingScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const store = createStore(RootReducer, applyMiddleware(thunk));
 
@@ -24,8 +25,19 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabStack = () => {
+  const icon = {
+    RecordList: 'md-wallet',
+    RecordStatistic: 'md-bar-chart',
+    SettingList: 'settings-sharp',
+  };
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          return <Ionicons name={icon[route.name]} size={size} color={color} />;
+        },
+      })}
+    >
       <Tab.Screen name="RecordList" component={RecordListScreen} />
       <Tab.Screen name="RecordStatistic" component={RecordStatisticScreen} />
       <Tab.Screen name="SettingList" component={SettingListScreen} />

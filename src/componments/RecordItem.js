@@ -1,14 +1,15 @@
+import _ from 'lodash';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
-import _ from 'lodash';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import themeColor from '../utils/theme';
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: themeColor.gray,
     marginBottom: 5,
     minHeight: 40,
     justifyContent: 'center',
@@ -28,9 +29,29 @@ const styles = StyleSheet.create({
 const RecordItem = ({ record, handleRecordDelete }) => {
   const navigation = useNavigation();
   const handleRecordEdit = (record) => {
-    navigation.push('RecordEdit', { record });
+    navigation.push('RecordEdit', { record, date: record.datetime });
   };
 
+  const typeToIcon = (type) => {
+    switch (type) {
+      case '食物':
+        return 'restaurant';
+      case '飲品':
+        return 'ios-pint';
+      case '交通':
+        return 'bus';
+      case '消費':
+        return 'cart-sharp';
+      case '居家':
+        return 'home';
+      case '收入':
+        return 'md-briefcase-sharp';
+      case '其他':
+        return 'ios-document-attach';
+      default:
+        return 'alert';
+    }
+  };
   return (
     <View style={styles.root}>
       <Text
@@ -42,7 +63,7 @@ const RecordItem = ({ record, handleRecordDelete }) => {
           paddingHorizontal: 10,
         }}
       >
-        {record.type}
+        <Ionicons name={typeToIcon(record.type)} size={20} /> {record.type}
       </Text>
       <Text
         style={{

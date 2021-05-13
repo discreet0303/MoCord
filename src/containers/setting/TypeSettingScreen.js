@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -10,8 +11,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import _ from 'lodash';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import HeaderNav from '../../componments/HeaderNav';
 import { fetchTypes, removeType } from '../../actions/TypesAction';
 import themeColor from '../../utils/theme';
@@ -75,30 +75,32 @@ const TypeSettingScreen = ({ navigation }) => {
         <View style={styles.typeSection}>
           <View style={styles.typeHeader}>
             <Text style={styles.typeHeaderText}>支出</Text>
-            <Button
-              title={'add'}
+            <TouchableOpacity
               onPress={() =>
                 navigation.push('SettingStack', {
                   screen: 'CreateSetting',
                   params: { mode: 'type' },
                 })
               }
-            />
+            >
+              <Ionicons name="add" size={30} color="#000" />
+            </TouchableOpacity>
           </View>
           {_.map(types['pos'], (type) => renderTypeItem(type))}
         </View>
         <View style={styles.typeSection}>
           <View style={styles.typeHeader}>
             <Text style={styles.typeHeaderText}>收入</Text>
-            <Button
-              title={'add'}
+            <TouchableOpacity
               onPress={() =>
                 navigation.push('SettingStack', {
                   screen: 'CreateSetting',
                   params: { mode: 'type' },
                 })
               }
-            />
+            >
+              <Ionicons name="add" size={30} color="#000" />
+            </TouchableOpacity>
           </View>
           {_.map(types['neg'], (type) => renderTypeItem(type))}
         </View>

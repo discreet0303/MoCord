@@ -87,10 +87,10 @@ const styles = StyleSheet.create({
 });
 
 const RecordStatisticScreen = ({ navigation }) => {
-  const year = moment().year();
   const types = useSelector((state) => state.types);
 
   const [filterType, setFilterType] = useState(FILTER_TYPE.month);
+  const [year, setYear] = useState(moment().year());
   const [month, setMonth] = useState(moment().month() + 1);
   const [monthReocrds, setMonthRecords] = useState([]);
   const [groupByMethod, setGroupByMethod] = useState('type');
@@ -107,7 +107,7 @@ const RecordStatisticScreen = ({ navigation }) => {
     });
     runAsync();
     return forceListener;
-  }, [month]);
+  }, [year, month]);
 
   const StatisticTypeSection = () => {
     const types = _.keys(FILTER_TYPE);
@@ -139,8 +139,9 @@ const RecordStatisticScreen = ({ navigation }) => {
     );
   };
 
-  const onMonthPress = (month) => {
+  const onMonthPress = (year, month) => {
     setDateModal(false);
+    setYear(year);
     setMonth(month);
   };
 
@@ -214,7 +215,7 @@ const RecordStatisticScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <HeaderNav title={`${month} 月統計`} />
+      <HeaderNav title={`${year}/${month} 月統計`} />
       <StatisticTypeSection />
       <ScrollView>
         {monthReocrds.length === 0 ? (

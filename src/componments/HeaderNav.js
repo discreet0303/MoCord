@@ -1,23 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import themeColor from '../utils/theme';
 
 const styles = StyleSheet.create({
   root: {
-    height: 45,
+    height: 55,
     backgroundColor: themeColor.background,
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 3,
     paddingHorizontal: 10,
   },
   leftSection: {
     flex: 1,
+    justifyContent: 'center',
   },
   rightSection: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'flex-end',
   },
   title: {
@@ -29,8 +31,11 @@ const styles = StyleSheet.create({
 const GoBack = () => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => navigation.goBack()}>
-      <Text>Back</Text>
+    <TouchableOpacity
+      style={{ width: 30, justifyContent: 'center', alignItems: 'center' }}
+      onPress={() => navigation.goBack()}
+    >
+      <Ionicons name={'md-arrow-back'} size={30} />
     </TouchableOpacity>
   );
 };

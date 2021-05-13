@@ -15,6 +15,7 @@ import HeaderNav from '../../componments/HeaderNav';
 import { OPERATOR_TYPE } from '../../config';
 import { addType } from '../../actions/TypesAction';
 import { addWallet } from '../../actions/WalletsAction';
+import themeColor from '../../utils/theme';
 
 const styles = StyleSheet.create({
   typeSection: {
@@ -57,7 +58,7 @@ const CreateSettingScreen = ({ route }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: themeColor.background }}>
       <HeaderNav title={HEADER_TITLE[route.params.mode]} goBack />
       {route.params.mode === 'type' && (
         <View style={styles.typeSection}>
