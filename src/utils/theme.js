@@ -1,4 +1,4 @@
 export default themeColor = {
-  background: '#fff',
+  background: '#ededed',
   gray: '#DDDDDD',
 };

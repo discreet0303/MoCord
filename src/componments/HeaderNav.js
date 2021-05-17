@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   leftSection: {
     flex: 1,
@@ -35,7 +35,7 @@ const GoBack = () => {
       style={{ width: 30, justifyContent: 'center', alignItems: 'center' }}
       onPress={() => navigation.goBack()}
     >
-      <Ionicons name={'md-arrow-back'} size={30} />
+      <Ionicons name={'md-arrow-back'} size={25} />
     </TouchableOpacity>
   );
 };

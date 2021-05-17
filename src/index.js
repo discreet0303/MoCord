@@ -16,8 +16,9 @@ import RecordStatisticScreen from './containers/record/RecordStatisticScreen';
 import SettingListScreen from './containers/setting/SettingListScreen';
 import TypeSettingScreen from './containers/setting/TypeSettingScreen';
 import WalletSettingScreen from './containers/setting/WalletSettingScreen';
-import CreateSettingScreen from './containers/setting/CreateSettingScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import CreateTypeScreen from './containers/setting/CreateTypeScreen';
+import CreateWalletScreen from './containers/setting/CreateWalletScreen';
 
 const store = createStore(RootReducer, applyMiddleware(thunk));
 
@@ -50,7 +51,8 @@ const SettingStack = () => {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="TypeSetting" component={TypeSettingScreen} />
       <Stack.Screen name="WalletSetting" component={WalletSettingScreen} />
-      <Stack.Screen name="CreateSetting" component={CreateSettingScreen} />
+      <Stack.Screen name="CreateType" component={CreateTypeScreen} />
+      <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
     </Stack.Navigator>
   );
 };

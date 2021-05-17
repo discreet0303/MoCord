@@ -1,14 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect } from 'react';
-import {
-  Button,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  ScrollView,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -17,27 +9,32 @@ import HeaderNav from '../../componments/HeaderNav';
 import themeColor from '../../utils/theme';
 
 const styles = StyleSheet.create({
-  root: { backgroundColor: themeColor.background },
-  walletHeader: {
+  root: { backgroundColor: themeColor.background, flex: 1 },
+  listHeader: {
+    color: '#767676',
+    fontSize: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 13,
+  },
+  listContent: {
+    paddingHorizontal: 20,
+    backgroundColor: '#F4F4F4',
+  },
+  listContentRow: {
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: themeColor.gray,
+    paddingVertical: 10,
+    borderBottomColor: '#E0E0E0',
+    borderBottomWidth: 1,
   },
-  walletRow: {
-    backgroundColor: '#fff',
-    marginVertical: 2,
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  listContentRowText: {
+    fontSize: 17,
   },
-  walletDeleteButton: {
-    backgroundColor: '#bbbbbb',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 8,
+  addRow: { paddingHorizontal: 20, paddingVertical: 20, backgroundColor: '#e2e2e2' },
+  addRowText: {
+    fontSize: 18,
+    fontWeight: '400',
   },
 });
 
@@ -49,35 +46,30 @@ const WalletSettingScreen = ({ navigation }) => {
     dispatch(fetchWallets());
   }, [dispatch]);
 
+  const renderItem = (item) => (
+    <View style={styles.listContentRow} key={item.label}>
+      <TouchableOpacity style={{ justifyContent: 'center' }}>
+        <Text style={styles.listContentRowText}>{item.label}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => dispatch(removeWallet(item))}>
+        <Ionicons name={'ios-trash-outline'} size={25} color={'red'} />
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.root}>
-      <HeaderNav title="設定錢包" goBack />
-      <ScrollView>
-        <View style={styles.walletHeader}>
-          <Text style={{ fontSize: 18 }}>錢包</Text>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.push('SettingStack', {
-                screen: 'CreateSetting',
-                params: { mode: 'wallet' },
-              })
-            }
-          >
-            <Ionicons name="add" size={30} color="#000" />
-          </TouchableOpacity>
-        </View>
-        {_.map(wallets, (wallet, walletIdx) => (
-          <View key={walletIdx} style={styles.walletRow}>
-            <Text>{wallet.label}</Text>
-            <TouchableOpacity
-              style={styles.walletDeleteButton}
-              onPress={() => dispatch(removeWallet(wallet))}
-            >
-              <Text style={{ fontSize: 16 }}>De</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
+      <HeaderNav title="帳戶" goBack />
+      <View style={styles.listContent}>{_.map(wallets, (item) => renderItem(item))}</View>
+      <TouchableOpacity
+        style={styles.addRow}
+        onPress={() => navigation.push('SettingStack', { screen: 'CreateWallet' })}
+      >
+        <Text style={styles.addRowText}>
+          <Ionicons name={'ios-add-outline'} size={20} />
+          新增帳戶
+        </Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
