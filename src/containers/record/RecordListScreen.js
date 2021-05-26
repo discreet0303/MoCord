@@ -67,11 +67,6 @@ const RecordListScreen = ({ navigation }) => {
     }
   };
 
-  const handleRecordDelete = (record) => {
-    const recordData = _.filter(records, (item) => item !== record);
-    dispatch(setRecord(date, recordData));
-  };
-
   return (
     <SafeAreaView style={styles.root}>
       <HeaderNav
@@ -113,7 +108,7 @@ const RecordListScreen = ({ navigation }) => {
       <ScrollView>
         <View>
           {records.map((record) => (
-            <RecordItem key={record.id} record={record} handleRecordDelete={handleRecordDelete} />
+            <RecordItem key={record.id} record={record} types={types} />
           ))}
         </View>
         <TouchableOpacity

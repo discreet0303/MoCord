@@ -1,10 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import {
-  getRecordsByDate,
-  createRecordByDate,
-  storeRecordByDate,
-} from '../utils/fileManager';
+import { getRecordsByDate, createRecordByDate, storeRecordByDate } from '../utils/fileManager';
 
 export const fetchRecord = (date) => async (dispatch) => {
   const data = await getRecordsByDate(date);
@@ -28,7 +24,7 @@ export const updateRecord = (record) => async (dispatch) => {
   const recordsData = await getRecordsByDate(date);
   const idx = _.findIndex(recordsData, ['id', record.id]);
   recordsData[idx] = record;
-  await storeRecordByDate(date, recordsData);
+  storeRecordByDate(date, recordsData);
   dispatch({
     type: 'SET_RECORD',
     payload: recordsData,
@@ -41,4 +37,15 @@ export const setRecord = (date, records) => {
     type: 'SET_RECORD',
     payload: records,
   };
+};
+
+export const deleteRecord = (record) => async (dispatch) => {
+  const date = moment(record.datetime).format('YYYY-MM-DD');
+  const records = await getRecordsByDate(record.datetime);
+  const newRecords = _.filter(records, (item) => item.id !== record.id);
+  storeRecordByDate(date, newRecords);
+  dispatch({
+    type: 'SET_RECORD',
+    payload: newRecords,
+  });
 };

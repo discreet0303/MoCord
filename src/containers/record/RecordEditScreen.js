@@ -14,8 +14,9 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-native-modal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { addRecord, updateRecord } from '../../actions/recordsAction';
+import { addRecord, deleteRecord, updateRecord } from '../../actions/recordsAction';
 
 import HeaderNav from '../../componments/HeaderNav';
 import Calculator from '../../componments/Calculator';
@@ -97,6 +98,21 @@ const RecordEditScreen = ({ navigation, route }) => {
   const [record, setRecord] = useState(_record);
   const [walletModal, setWalletModal] = useState(false);
 
+  const handleRecordDelete = (record) => {
+    if (editMode) {
+      Alert.alert('刪除紀錄', '', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => dispatch(deleteRecord(record)).then(() => navigation.goBack()),
+        },
+      ]);
+    }
+  };
+
   const handleMoneyCalculate = () => {
     if (editMode) {
       dispatch(updateRecord(record));
@@ -153,11 +169,19 @@ const RecordEditScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.root}>
+      <HeaderNav
+        title={screenTitle}
+        goBack
+        renderRightSection={
+          <TouchableOpacity onPress={() => handleRecordDelete(record)}>
+            <Ionicons name={'trash-outline'} size={30} />
+          </TouchableOpacity>
+        }
+      />
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <HeaderNav title={screenTitle} goBack />
         <AmountMoneySection />
         <RecordTypeList />
         <TextInput
