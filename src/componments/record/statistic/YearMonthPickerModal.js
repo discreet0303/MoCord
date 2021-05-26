@@ -3,8 +3,9 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import themeColor from '../../utils/theme';
+import themeColor from '../../../utils/theme';
 
 const styles = StyleSheet.create({
   modal: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     borderBottomColor: themeColor.gray,
     borderBottomWidth: 2,
   },
-  yearText: { fontSize: 30, textAlign: 'center', fontWeight: 'bold' },
+  yearText: { fontSize: 30, textAlign: 'center' },
   monthItem: {
     width: 100,
     height: 50,
@@ -53,11 +54,11 @@ const YearMonthPickerModal = ({ isOpen, onMonthPress }) => {
       <View style={styles.container}>
         <View style={styles.yearSection}>
           <TouchableOpacity onPress={() => setYear((y) => y - 1)}>
-            <Text>Prev</Text>
+            <Ionicons name={'chevron-back-outline'} size={20} />
           </TouchableOpacity>
           <Text style={styles.yearText}>{year}</Text>
           <TouchableOpacity onPress={() => setYear((y) => y + 1)}>
-            <Text>Next</Text>
+            <Ionicons name={'chevron-forward-outline'} size={20} />
           </TouchableOpacity>
         </View>
         <View style={{ height: 220 }}>

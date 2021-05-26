@@ -47,8 +47,6 @@ const TypeSettingScreen = ({ navigation }) => {
     dispatch(fetchTypes());
   }, [dispatch]);
 
-  console.log(types);
-
   const renderItem = (item) => (
     <View style={styles.listContentRow} key={item.label}>
       <View style={{ flexDirection: 'row' }}>

@@ -1,23 +1,16 @@
-import moment from 'moment';
 import _ from 'lodash';
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  View,
-  Button,
-} from 'react-native';
-import { useSelector } from 'react-redux';
+import { SafeAreaView, ScrollView, TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 
 import HeaderNav from '../../componments/HeaderNav';
-import YearMonthPickerModal from '../../componments/record/YearMonthPickerModal';
+import YearMonthPickerModal from '../../componments/record/statistic/YearMonthPickerModal';
 import { getRecordByMonth } from '../../utils/fileManager';
-import { calcuTotalMoney } from '../../utils/record';
 import themeColor from '../../utils/theme';
+
 import { FILTER_TYPE } from '../../utils/statistic';
+import SummaryRecordWithLine from '../../componments/record/statistic/SummaryRecordWithLine';
+import SummaryRecordWithDetail from '../../componments/record/statistic/SummaryRecordWithDetail';
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: themeColor.background },
@@ -45,55 +38,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#000',
   },
-  summarySection: {
-    marginVertical: 10,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    marginBottom: 5,
-  },
-  summaryRowText: {
-    fontSize: 18,
-    textAlign: 'right',
-  },
-  recordSection: {},
-  recordItem: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  recordItemTitle: {
-    borderLeftColor: 'gray',
-    borderLeftWidth: 4,
-    marginBottom: 5,
-  },
-  recordItemTitleText: {
-    fontSize: 20,
-    fontWeight: '700',
-    paddingLeft: 10,
-  },
-  recordRow: { flexDirection: 'row' },
-  recordText: { fontSize: 18 },
-  recordAmount: {
-    flexDirection: 'row',
-    marginTop: 5,
-    paddingTop: 5,
-    borderTopColor: '#b7b7b7',
-    borderTopWidth: 1,
-  },
-  active: {
-    backgroundColor: 'gray',
-  },
 });
 
 const RecordStatisticScreen = ({ navigation }) => {
-  const types = useSelector((state) => state.types);
-
   const [filterType, setFilterType] = useState(FILTER_TYPE.month);
   const [year, setYear] = useState(moment().year());
   const [month, setMonth] = useState(moment().month() + 1);
   const [monthReocrds, setMonthRecords] = useState([]);
-  const [groupByMethod, setGroupByMethod] = useState('type');
   const [dateModal, setDateModal] = useState(false);
 
   useEffect(() => {
@@ -145,74 +96,6 @@ const RecordStatisticScreen = ({ navigation }) => {
     setMonth(month);
   };
 
-  const SummarySection = () => {
-    const groupByType = _.groupBy(monthReocrds, 'type');
-    let metadata = _.map(groupByType, (records, type) => {
-      const amount = _.sumBy(records, (item) => Number(item.money));
-      return {
-        records,
-        type,
-        amount,
-      };
-    });
-    const maxAmount = _.max(_.map(metadata, 'amount'));
-
-    return (
-      <View style={styles.summarySection}>
-        {_.map(metadata, (row) => (
-          <View key={row.type} style={styles.summaryRow}>
-            <Text style={styles.summaryRowText}>{row.type}</Text>
-            <View style={{ flex: 1, paddingHorizontal: 10, justifyContent: 'center' }}>
-              <View
-                style={{
-                  height: 1,
-                  backgroundColor: 'gray',
-                  width: `${(row.amount / maxAmount) * 100}%`,
-                }}
-              ></View>
-            </View>
-            <Text style={{ ...styles.summaryRowText, width: '15%' }}>{row.amount}</Text>
-          </View>
-        ))}
-        <View style={{ ...styles.recordAmount, marginHorizontal: 10 }}>
-          <Text style={[styles.recordText, { flex: 1 }]}>合計</Text>
-          <Text style={styles.recordText}>{calcuTotalMoney(monthReocrds, types)}</Text>
-        </View>
-      </View>
-    );
-  };
-
-  const RecordSection = () => {
-    let metadata = [];
-    if (groupByMethod === 'type') metadata = _.groupBy(monthReocrds, 'type');
-    else if (groupByMethod === 'note') metadata = _.groupBy(monthReocrds, 'note');
-
-    return (
-      <>
-        {_.map(metadata, (obj, key) => (
-          <View key={key} style={styles.recordItem}>
-            <View style={styles.recordItemTitle}>
-              <Text style={styles.recordItemTitleText}>{key}</Text>
-            </View>
-            {_.map(metadata[key], (record, idx) => (
-              <View key={idx} style={styles.recordRow}>
-                <Text style={[styles.recordText, { paddingRight: 10 }]}>
-                  {moment(record.datetime).format('DD')}
-                </Text>
-                <Text style={[styles.recordText, { flex: 1 }]}>{record.note}</Text>
-                <Text style={styles.recordText}>{record.money}</Text>
-              </View>
-            ))}
-            <View style={styles.recordAmount}>
-              <Text style={[styles.recordText, { flex: 1 }]}>合計</Text>
-              <Text style={styles.recordText}>{calcuTotalMoney(metadata[key], types)}</Text>
-            </View>
-          </View>
-        ))}
-      </>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.root}>
       <HeaderNav title={`${year}/${month} 月統計`} />
@@ -224,12 +107,8 @@ const RecordStatisticScreen = ({ navigation }) => {
           </View>
         ) : (
           <>
-            <SummarySection />
-            <View style={{ flexDirection: 'row' }}>
-              <Button title={'類別'} onPress={() => setGroupByMethod('type')} />
-              <Button title={'備註'} onPress={() => setGroupByMethod('note')} />
-            </View>
-            <RecordSection />
+            <SummaryRecordWithLine records={monthReocrds} />
+            <SummaryRecordWithDetail records={monthReocrds} />
           </>
         )}
       </ScrollView>

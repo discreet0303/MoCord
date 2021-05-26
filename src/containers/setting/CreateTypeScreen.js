@@ -93,7 +93,6 @@ const CreateTypeScreen = () => {
   };
 
   const onSubmit = () => {
-    console.log(type);
     dispatch(addType(type)).then(() => {
       setType(INITIAL_VALUE);
     });

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux';
 import themeColor from '../utils/theme';
 import { fetchTypes } from '../actions/TypesAction';
@@ -41,6 +41,8 @@ const LogoScreen = ({ navigation }) => {
     <View style={styles.root}>
       <Text style={styles.logoText}>MoCord</Text>
       <Text style={styles.tipText}>Load data and navigate to next page after 2 seconds</Text>
+      <Text style={styles.tipText}>{Dimensions.get('window').height}</Text>
+      <Text style={styles.tipText}>{Dimensions.get('screen').height}</Text>
     </View>
   );
 };

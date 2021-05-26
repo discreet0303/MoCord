@@ -1,7 +1,15 @@
 import _ from 'lodash';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -45,7 +53,7 @@ const RecordListScreen = ({ navigation }) => {
   const types = useSelector((state) => state.types);
   const records = useSelector((state) => state.records.records);
   const [date, setDate] = useState(dateOnly());
-  const [isCalendarOpen, setCalendarOpen] = useState(true);
+  const [isCalendarOpen, setCalendarOpen] = useState(Dimensions.get('screen').height > 700);
 
   useEffect(() => {
     dispatch(fetchRecord(date));
